@@ -1,4 +1,12 @@
-<h1>Diagrama de classes e relacionamentos</h1>
+![Static Badge](https://img.shields.io/badge/Deploy-none-red)
+# Orpheu-Web-API
+## Tecnologias utilizadas
+<p align="left">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=java,hibernate,spring&theme=dark" />
+  </a>
+</p>
+## Diagrama de classes e relacionamentos
 
 ```mermaid
 classDiagram
@@ -28,7 +36,7 @@ classDiagram
     class SupplierOrder {
         -Long id
         -Supplier supplierId
-        -Date supplier_order_date
+        -Date supplierOrderDate
         -Double total
     }
 
@@ -64,14 +72,14 @@ classDiagram
 
     class Category {
         -Long id
-        -String category_name
+        -String categoryName
     }
 
     %% Relationships
-    Category "1" -- "*" Product : OneToMany
-    Customer "1" -- "*" CustomerOrder : OneToMany
-    CustomerOrder "1" -- "*" CustomerOrderProduct : OneToMany
-    Product "1" -- "*" CustomerOrderProduct : OneToMany
-    Supplier "1" -- "*" SupplierOrder : OneToMany
-    SupplierOrder "1" -- "*" SupplierOrderProduct : OneToMany
-    Product "1" -- "*" SupplierOrderProduct : OneToMany
+    Category "1" -- "*" Product 
+    Customer "1" -- "*" CustomerOrder 
+    CustomerOrder "1" -- "*" CustomerOrderProduct 
+    Product "1" -- "*" CustomerOrderProduct 
+    Supplier "1" -- "*" SupplierOrder 
+    SupplierOrder "1" -- "*" SupplierOrderProduct 
+    Product "1" -- "*" SupplierOrderProduct 
