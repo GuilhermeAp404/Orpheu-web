@@ -2,76 +2,76 @@
 
 ```mermaid
 classDiagram
-    class Users {
+    class User {
         -Long id
-        -String user_name
+        -String username
         -String password
         -String email
         -String role
     }
 
-    class Customers {
+    class Customer {
         -Long id
-        -String customer_name
+        -String customerName
         -String phone
         -String address
     }
 
-    class Suppliers {
+    class Supplier {
         -Long id
-        -String supplier_name
-        -String supplier_register
+        -String supplierName
+        -String supplierRegister
         -String phone
         -String address
     }
 
-    class SupplierOrders {
+    class SupplierOrder {
         -Long id
-        -Long supplier_id
+        -Supplier supplierId
         -Date supplier_order_date
         -Double total
     }
 
     class SupplierOrderProducts {
         -Long id
-        -Long supplier_order_id
-        -Long product_id
+        -Supplier supplierOrderId
+        -Product productId
         -Double amount
     }
 
-    class Products {
+    class Product {
         -Long id
-        -String product_name
-        -Long category_id
-        -Double cost_price
-        -Double selling_price
+        -String productName
+        -Category categoryId
+        -Double costPrice
+        -Double sellingPrice
         -Integer amount
     }
 
-    class CustomerOrderProducts {
+    class CustomerOrderProduct {
         -Long id
-        -Long order_id
-        -Long product_id
+        -CustomerOrder customerOrderId
+        -Product productId
         -Double amount
     }
 
-    class CustomerOrders {
+    class CustomerOrder {
         -Long id
-        -Long customer_id
-        -Date customer_order_date
+        -Customer customerId
+        -Date customerOrderDate
         -Double total
     }
 
-    class Categories {
+    class Category {
         -Long id
         -String category_name
     }
 
     %% Relationships
-    Categories "1" -- "0..*" Products : "has many"
-    Customers "1" -- "0..*" CustomerOrders : "places"
-    CustomerOrders "1" -- "0..*" CustomerOrderProducts : "contains"
-    Products "1" -- "0..*" CustomerOrderProducts : "ordered in"
-    Suppliers "1" -- "0..*" SupplierOrders : "places"
-    SupplierOrders "1" -- "0..*" SupplierOrderProducts : "contains"
-    Products "1" -- "0..*" SupplierOrderProducts : "supplied in"
+    Category "1" -- "*" Product : OneToMany
+    Customer "1" -- "*" CustomerOrder : OneToMany
+    CustomerOrder "1" -- "*" CustomerOrderProduct : OneToMany
+    Product "1" -- "*" CustomerOrderProduct : OneToMany
+    Supplier "1" -- "*" SupplierOrder : OneToMany
+    SupplierOrder "1" -- "*" SupplierOrderProduct : OneToMany
+    Product "1" -- "*" SupplierOrderProduct : OneToMany
