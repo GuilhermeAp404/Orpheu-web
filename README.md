@@ -32,7 +32,7 @@ classDiagram
         -Double total
     }
 
-    class SupplierOrderProducts {
+    class SupplierOrderProduct {
         -Long id
         -Supplier supplierOrderId
         -Product productId
