@@ -1,4 +1,5 @@
 ![Static Badge](https://img.shields.io/badge/Deploy-none-red)
+![Static Badge](https://img.shields.io/badge/Status-in_progress-orange)
 # Orpheu-Web-API
 ## Tecnologias utilizadas
 <p align="left">
