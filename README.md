@@ -1,81 +1,75 @@
-# Database Schema
-
-Abaixo está o diagrama do banco de dados, representado em Mermaid:
-
 ```mermaid
 erDiagram
     users {
-      Long id PK
-      varchar user_name "65"
-      varchar password "255"
-      varchar email "90"
-      varchar role "10"
+        Long id PK
+        varchar user_name
+        varchar password
+        varchar email
+        varchar role
     }
 
     customers {
-      Long id PK
-      varchar customer_name "65"
-      varchar phone "11" UNIQUE NOT NULL
-      varchar address "255" NOT NULL
+        Long id PK
+        varchar customer_name
+        varchar phone
+        varchar address
     }
 
     suppliers {
-      Long id PK
-      varchar supplier_name "65"
-      varchar supplier_register "14" UNIQUE NOT NULL
-      varchar phone "11" UNIQUE NOT NULL
-      varchar address "255" NOT NULL
+        Long id PK
+        varchar supplier_name
+        varchar supplier_register
+        varchar phone
+        varchar address
     }
 
     supplier_orders {
-      Long id PK
-      Long supplier_id FK
-      date supplier_order_date
-      Double total
+        Long id PK
+        Long supplier_id FK
+        date supplier_order_date
+        Double total
     }
 
     supplier_order_products {
-      Long id PK
-      Long supplier_order_id FK NOT NULL
-      Long product_id FK NOT NULL
-      double amount NOT NULL
+        Long id PK
+        Long supplier_order_id FK
+        Long product_id FK
+        double amount
     }
 
     products {
-      Long id PK
-      varchar product_name "255" UNIQUE NOT NULL
-      Long category_id FK NOT NULL
-      double cost_price NOT NULL
-      double selling_price NOT NULL
-      integer amount DEFAULT "0"
+        Long id PK
+        varchar product_name
+        Long category_id FK
+        double cost_price
+        double selling_price
+        integer amount
     }
 
     customer_order_products {
-      Long id PK
-      Long order_id FK NOT NULL
-      Long product_id FK NOT NULL
-      double amount NOT NULL
+        Long id PK
+        Long order_id FK
+        Long product_id FK
+        double amount
     }
 
     customer_orders {
-      Long id PK
-      Long customer_id FK
-      date customer_order_date
-      Double total
+        Long id PK
+        Long customer_id FK
+        date customer_order_date
+        Double total
     }
 
     categories {
-      Long id PK
-      varchar category_name "24"
+        Long id PK
+        varchar category_name
     }
 
     %% Relationships
-    categories ||--o{ products : "id > category_id"
-    customers ||--o{ customer_orders : "id > customer_id"
-    customer_orders ||--o{ customer_order_products : "id > order_id"
-    products ||--o{ customer_order_products : "id > product_id"
-
-    suppliers ||--o{ supplier_orders : "id > supplier_id"
-    supplier_orders ||--o{ supplier_order_products : "id > supplier_order_id"
-    products ||--o{ supplier_order_products : "id > product_id"
-```
+    categories ||--o{ products : "has many"
+    customers ||--o{ customer_orders : "places"
+    customer_orders ||--o{ customer_order_products : "contains"
+    products ||--o{ customer_order_products : "ordered in"
+    suppliers ||--o{ supplier_orders : "places"
+    supplier_orders ||--o{ supplier_order_products : "contains"
+    products ||--o{ supplier_order_products : "supplied in"
