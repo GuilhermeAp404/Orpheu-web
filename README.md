@@ -78,3 +78,4 @@ erDiagram
     suppliers ||--o{ supplier_orders : "id > supplier_id"
     supplier_orders ||--o{ supplier_order_products : "id > supplier_order_id"
     products ||--o{ supplier_order_products : "id > product_id"
+```
