@@ -1,75 +1,77 @@
+##Diagrama de classes e relacionamentos: 
+
 ```mermaid
-erDiagram
-    users {
-        Long id PK
-        varchar user_name
-        varchar password
-        varchar email
-        varchar role
+classDiagram
+    class Users {
+        -Long id
+        -String user_name
+        -String password
+        -String email
+        -String role
     }
 
-    customers {
-        Long id PK
-        varchar customer_name
-        varchar phone
-        varchar address
+    class Customers {
+        -Long id
+        -String customer_name
+        -String phone
+        -String address
     }
 
-    suppliers {
-        Long id PK
-        varchar supplier_name
-        varchar supplier_register
-        varchar phone
-        varchar address
+    class Suppliers {
+        -Long id
+        -String supplier_name
+        -String supplier_register
+        -String phone
+        -String address
     }
 
-    supplier_orders {
-        Long id PK
-        Long supplier_id FK
-        date supplier_order_date
-        Double total
+    class SupplierOrders {
+        -Long id
+        -Long supplier_id
+        -Date supplier_order_date
+        -Double total
     }
 
-    supplier_order_products {
-        Long id PK
-        Long supplier_order_id FK
-        Long product_id FK
-        double amount
+    class SupplierOrderProducts {
+        -Long id
+        -Long supplier_order_id
+        -Long product_id
+        -Double amount
     }
 
-    products {
-        Long id PK
-        varchar product_name
-        Long category_id FK
-        double cost_price
-        double selling_price
-        integer amount
+    class Products {
+        -Long id
+        -String product_name
+        -Long category_id
+        -Double cost_price
+        -Double selling_price
+        -Integer amount
     }
 
-    customer_order_products {
-        Long id PK
-        Long order_id FK
-        Long product_id FK
-        double amount
+    class CustomerOrderProducts {
+        -Long id
+        -Long order_id
+        -Long product_id
+        -Double amount
     }
 
-    customer_orders {
-        Long id PK
-        Long customer_id FK
-        date customer_order_date
-        Double total
+    class CustomerOrders {
+        -Long id
+        -Long customer_id
+        -Date customer_order_date
+        -Double total
     }
 
-    categories {
-        Long id PK
-        varchar category_name
+    class Categories {
+        -Long id
+        -String category_name
     }
 
     %% Relationships
-    categories ||--o{ products : "has many"
-    customers ||--o{ customer_orders : "places"
-    customer_orders ||--o{ customer_order_products : "contains"
-    products ||--o{ customer_order_products : "ordered in"
-    suppliers ||--o{ supplier_orders : "places"
-    supplier_orders ||--o{ supplier_order_products : "contains"
-    products ||--o{ supplier_order_products : "supplied in"
+    Categories "1" -- "0..*" Products : "has many"
+    Customers "1" -- "0..*" CustomerOrders : "places"
+    CustomerOrders "1" -- "0..*" CustomerOrderProducts : "contains"
+    Products "1" -- "0..*" CustomerOrderProducts : "ordered in"
+    Suppliers "1" -- "0..*" SupplierOrders : "places"
+    SupplierOrders "1" -- "0..*" SupplierOrderProducts : "contains"
+    Products "1" -- "0..*" SupplierOrderProducts : "supplied in"
