@@ -1,10 +1,13 @@
-https://img.shields.io/badge/build-in_process-orange
-<h1>Orpheu-Web-API<h1>
-<h2>Tecnologias utilizadas</h2>
-<div style="margin:0 auto">
-    
-</div>
-<h2>Diagrama de classes e relacionamentos</h2>
+![Static Badge](https://img.shields.io/badge/Deploy-none-red)
+![Static Badge](https://img.shields.io/badge/Status-in_progress-orange)
+# Orpheu-Web-API
+## Tecnologias utilizadas
+<p align="left">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=java,hibernate,spring&theme=dark" />
+  </a>
+</p>
+## Diagrama de classes e relacionamentos
 ```mermaid
 classDiagram
     class User {
