@@ -1,14 +1,16 @@
 package com.erp.management.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name="categories")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +25,5 @@ public class Category {
     public Category(String categoryName) {
         this.categoryName = categoryName;
     }
+
 }
