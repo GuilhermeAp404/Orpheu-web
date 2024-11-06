@@ -1,4 +1,6 @@
 package com.erp.management.service;
 
-public interface ProductService {
+import com.erp.management.domain.model.Product;
+
+public interface ProductService extends CRUDService<Product, Long>{
 }

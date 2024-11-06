@@ -1,4 +1,6 @@
 package com.erp.management.domain.repository;
 
-public interface ProductRepository {
+import com.erp.management.domain.model.Product;
+
+public interface ProductRepository extends BaseRespository<Product, Long> {
 }
