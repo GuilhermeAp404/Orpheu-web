@@ -4,6 +4,7 @@ import com.erp.management.controller.DTOs.SimpleMessage;
 import com.erp.management.controller.DTOs.SuccessMessage;
 import com.erp.management.domain.model.Product;
 import com.erp.management.service.ProductService;
+import com.erp.management.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import java.util.NoSuchElementException;
 @RequestMapping(value = "/product")
 public class ProductController {
     @Autowired
-    private ProductService productService;
+    private ProductServiceImpl productService;
 
     @PostMapping
     public ResponseEntity<SuccessMessage<Product>> createProduct(@RequestBody Product product){

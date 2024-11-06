@@ -4,7 +4,7 @@ import com.erp.management.controller.DTOs.CategoryList;
 import com.erp.management.controller.DTOs.SimpleMessage;
 import com.erp.management.controller.DTOs.SuccessMessage;
 import com.erp.management.domain.model.Category;
-import com.erp.management.service.CategoryService;
+import com.erp.management.service.impl.CategoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 @RequestMapping(value = "/category")
 public class CategoryController {
     @Autowired
-    private CategoryService categoryService;
+    private CategoryServiceImpl categoryService;
 
     @PostMapping
     public ResponseEntity<SuccessMessage<Category>> createCategory(@RequestBody Category category){

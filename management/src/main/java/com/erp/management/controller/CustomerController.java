@@ -4,7 +4,7 @@ import com.erp.management.controller.DTOs.CustomerList;
 import com.erp.management.controller.DTOs.SimpleMessage;
 import com.erp.management.controller.DTOs.SuccessMessage;
 import com.erp.management.domain.model.Customer;
-import com.erp.management.service.CustomerService;
+import com.erp.management.service.impl.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 @RequestMapping(value = "/customer")
 public class CustomerController {
     @Autowired
-    private CustomerService customerService;
+    private CustomerServiceImpl customerService;
 
     @PostMapping
     public ResponseEntity<SuccessMessage<Customer>> createCustomer(@RequestBody Customer customer){
