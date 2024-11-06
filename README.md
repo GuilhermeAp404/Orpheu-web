@@ -8,6 +8,7 @@
   </a>
 </p>
 ## Diagrama de classes e relacionamentos
+
 ```mermaid
 classDiagram
     class User {
