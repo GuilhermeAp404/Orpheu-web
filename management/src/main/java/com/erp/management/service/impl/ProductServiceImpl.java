@@ -67,6 +67,6 @@ public class ProductServiceImpl implements ProductService {
             throw new NoSuchElementException("Esse produto não existe!");
         }
 
-        productRepository.findById(id);
+        productRepository.deleteById(id);
     }
 }
