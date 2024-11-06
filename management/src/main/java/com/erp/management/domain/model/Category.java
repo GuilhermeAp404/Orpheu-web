@@ -15,6 +15,7 @@ public class Category {
     private Long id;
 
     @Column(name = "category_name",
+            unique = true,
             nullable = false ,
             length = 24)
     private String categoryName;
