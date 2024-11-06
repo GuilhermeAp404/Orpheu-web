@@ -1,4 +1,71 @@
 package com.erp.management.controller;
 
+import com.erp.management.controller.DTOs.CategoryList;
+import com.erp.management.controller.DTOs.SimpleMessage;
+import com.erp.management.controller.DTOs.SuccessMessage;
+import com.erp.management.domain.model.Category;
+import com.erp.management.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+@RestController
+@RequestMapping(value = "/category")
 public class CategoryController {
+    @Autowired
+    private CategoryService categoryService;
+
+    @PostMapping
+    public ResponseEntity<SuccessMessage<Category>> createCategory(@RequestBody Category category){
+        Category createdCategory = categoryService.save(category);
+        return new ResponseEntity<>(
+                new SuccessMessage<>("Categoria criada com sucesso!", createdCategory),
+                HttpStatus.CREATED
+        );
+    };
+
+    @GetMapping
+    public ResponseEntity<CategoryList> getAllCategories(){
+        Iterable<Category> categoryList = categoryService.findAll();
+        return new ResponseEntity<>(
+                new CategoryList(categoryList),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long id){
+        var category = categoryService.findById(id);
+        if(category.isEmpty()){
+            throw new NoSuchElementException("Essa categoria não existe");
+        }
+
+        return new ResponseEntity<>(
+                category.get(),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<SuccessMessage<Category>> updateCategory(@RequestBody Category category, @PathVariable Long id){
+        Category updatedCategory = categoryService.update(category, id);
+        return new ResponseEntity<>(
+                new SuccessMessage<>("Categoria atualizada com sucesso!", updatedCategory),
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<SimpleMessage> deleteCategory(@PathVariable Long id){
+        categoryService.delete(id);
+        return new ResponseEntity<>(
+                new SimpleMessage("Categoria deletada!"),
+                HttpStatus.OK
+        );
+    }
+
 }

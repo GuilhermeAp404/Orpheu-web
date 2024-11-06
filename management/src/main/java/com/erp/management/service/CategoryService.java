@@ -1,4 +1,6 @@
 package com.erp.management.service;
 
-public interface CategoryService {
+import com.erp.management.domain.model.Category;
+
+public interface CategoryService extends CRUDService<Category, Long>{
 }
