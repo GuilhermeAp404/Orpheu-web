@@ -9,5 +9,7 @@ public interface CRUDService<T, ID> {
 
     T save(T t);
 
+    T update(T t, ID id);
+
     void delete(ID id);
 }
