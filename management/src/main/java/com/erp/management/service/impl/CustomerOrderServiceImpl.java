@@ -1,4 +1,4 @@
 package com.erp.management.service.impl;
 
-public class CustomerOrderImpl {
+public class CustomerOrderServiceImpl {
 }
