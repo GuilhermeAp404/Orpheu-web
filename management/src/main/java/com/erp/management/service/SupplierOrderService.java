@@ -1,4 +1,6 @@
 package com.erp.management.service;
 
-public interface SupplierOrderService {
+import com.erp.management.domain.model.SupplierOrder;
+
+public interface SupplierOrderService extends CRUDService<SupplierOrder, Long> {
 }
