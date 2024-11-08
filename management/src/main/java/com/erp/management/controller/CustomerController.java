@@ -1,8 +1,8 @@
 package com.erp.management.controller;
 
-import com.erp.management.controller.DTOs.CustomerList;
-import com.erp.management.controller.DTOs.SimpleMessage;
-import com.erp.management.controller.DTOs.SuccessMessage;
+import com.erp.management.controller.DTOs.CustomerListDTO;
+import com.erp.management.controller.DTOs.SimpleMessageDTO;
+import com.erp.management.controller.DTOs.SuccessMessageDTO;
 import com.erp.management.domain.model.Customer;
 import com.erp.management.service.impl.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +19,19 @@ public class CustomerController {
     private CustomerServiceImpl customerService;
 
     @PostMapping
-    public ResponseEntity<SuccessMessage<Customer>> createCustomer(@RequestBody Customer customer){
+    public ResponseEntity<SuccessMessageDTO<Customer>> createCustomer(@RequestBody Customer customer){
         Customer createdCustomer = customerService.save(customer);
         return new ResponseEntity<>(
-                new SuccessMessage<>("Cliente criado com sucesso!", createdCustomer),
+                new SuccessMessageDTO<>("Cliente criado com sucesso!", createdCustomer),
                 HttpStatus.CREATED
         );
     }
 
     @GetMapping
-    public ResponseEntity<CustomerList> getAllCustomers(){
+    public ResponseEntity<CustomerListDTO> getAllCustomers(){
         Iterable<Customer> customersList = customerService.findAll();
         return new ResponseEntity<>(
-                new CustomerList(customersList),
+                new CustomerListDTO(customersList),
                 HttpStatus.OK
         );
     }
@@ -49,19 +49,19 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SuccessMessage<Customer>> updateCustomer(@PathVariable Long id, @RequestBody Customer customer){
+    public ResponseEntity<SuccessMessageDTO<Customer>> updateCustomer(@PathVariable Long id, @RequestBody Customer customer){
         Customer updateCustomer = customerService.update(customer, id);
         return new ResponseEntity<>(
-                new SuccessMessage<>("Cliente atualizado com sucesso!", updateCustomer),
+                new SuccessMessageDTO<>("Cliente atualizado com sucesso!", updateCustomer),
                 HttpStatus.OK
         );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<SimpleMessage> deleteCustomer(@PathVariable Long id){
+    public ResponseEntity<SimpleMessageDTO> deleteCustomer(@PathVariable Long id){
         customerService.delete(id);
         return new ResponseEntity<>(
-                new SimpleMessage("Cliente deletado!"),
+                new SimpleMessageDTO("Cliente deletado!"),
                 HttpStatus.OK
         );
     }

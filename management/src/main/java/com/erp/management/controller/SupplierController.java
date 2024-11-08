@@ -1,10 +1,9 @@
 package com.erp.management.controller;
 
-import com.erp.management.controller.DTOs.SimpleMessage;
-import com.erp.management.controller.DTOs.SuccessMessage;
-import com.erp.management.controller.DTOs.SupplierList;
+import com.erp.management.controller.DTOs.SimpleMessageDTO;
+import com.erp.management.controller.DTOs.SuccessMessageDTO;
+import com.erp.management.controller.DTOs.SupplierListDTO;
 import com.erp.management.domain.model.Supplier;
-import com.erp.management.service.SupplierService;
 import com.erp.management.service.impl.SupplierServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,18 +19,18 @@ public class SupplierController {
     private SupplierServiceImpl supplierService;
 
     @PostMapping
-    public ResponseEntity<SuccessMessage<Supplier>> createSupplier(@RequestBody Supplier supplier){
+    public ResponseEntity<SuccessMessageDTO<Supplier>> createSupplier(@RequestBody Supplier supplier){
         Supplier createdSupplier = supplierService.save(supplier);
         return new ResponseEntity<>(
-                new SuccessMessage<>("Fornecedor criado com sucesso!", createdSupplier),
+                new SuccessMessageDTO<>("Fornecedor criado com sucesso!", createdSupplier),
                 HttpStatus.CREATED
         );
     }
     @GetMapping
-    public ResponseEntity<SupplierList> getAllSuppliers(){
+    public ResponseEntity<SupplierListDTO> getAllSuppliers(){
         Iterable<Supplier> suppliersList = supplierService.findAll();
         return new ResponseEntity<>(
-                new SupplierList(suppliersList),
+                new SupplierListDTO(suppliersList),
                 HttpStatus.OK
         );
     }
@@ -50,20 +49,20 @@ public class SupplierController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SuccessMessage<Supplier>> updateSupplier(@PathVariable Long id, @RequestBody Supplier supplier){
+    public ResponseEntity<SuccessMessageDTO<Supplier>> updateSupplier(@PathVariable Long id, @RequestBody Supplier supplier){
         Supplier updatedSupplier = supplierService.update(supplier, id);
         return new ResponseEntity<>(
-                new SuccessMessage<>("Fornecerdor atualizado com sucesso!", updatedSupplier),
+                new SuccessMessageDTO<>("Fornecerdor atualizado com sucesso!", updatedSupplier),
                 HttpStatus.OK
         );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<SimpleMessage> deleteSupplier(@PathVariable Long id){
+    public ResponseEntity<SimpleMessageDTO> deleteSupplier(@PathVariable Long id){
         supplierService.delete(id);
 
         return new ResponseEntity<>(
-                new SimpleMessage("Fornecedor deletado!"),
+                new SimpleMessageDTO("Fornecedor deletado!"),
                 HttpStatus.OK
         );
     }

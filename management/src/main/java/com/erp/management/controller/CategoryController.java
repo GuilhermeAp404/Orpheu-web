@@ -1,8 +1,8 @@
 package com.erp.management.controller;
 
-import com.erp.management.controller.DTOs.CategoryList;
-import com.erp.management.controller.DTOs.SimpleMessage;
-import com.erp.management.controller.DTOs.SuccessMessage;
+import com.erp.management.controller.DTOs.CategoryListDTO;
+import com.erp.management.controller.DTOs.SimpleMessageDTO;
+import com.erp.management.controller.DTOs.SuccessMessageDTO;
 import com.erp.management.domain.model.Category;
 import com.erp.management.service.impl.CategoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +19,19 @@ public class CategoryController {
     private CategoryServiceImpl categoryService;
 
     @PostMapping
-    public ResponseEntity<SuccessMessage<Category>> createCategory(@RequestBody Category category){
+    public ResponseEntity<SuccessMessageDTO<Category>> createCategory(@RequestBody Category category){
         Category createdCategory = categoryService.save(category);
         return new ResponseEntity<>(
-                new SuccessMessage<>("Categoria criada com sucesso!", createdCategory),
+                new SuccessMessageDTO<>("Categoria criada com sucesso!", createdCategory),
                 HttpStatus.CREATED
         );
     };
 
     @GetMapping
-    public ResponseEntity<CategoryList> getAllCategories(){
+    public ResponseEntity<CategoryListDTO> getAllCategories(){
         Iterable<Category> categoryList = categoryService.findAll();
         return new ResponseEntity<>(
-                new CategoryList(categoryList),
+                new CategoryListDTO(categoryList),
                 HttpStatus.OK
         );
     }
@@ -50,19 +50,19 @@ public class CategoryController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<SuccessMessage<Category>> updateCategory(@RequestBody Category category, @PathVariable Long id){
+    public ResponseEntity<SuccessMessageDTO<Category>> updateCategory(@RequestBody Category category, @PathVariable Long id){
         Category updatedCategory = categoryService.update(category, id);
         return new ResponseEntity<>(
-                new SuccessMessage<>("Categoria atualizada com sucesso!", updatedCategory),
+                new SuccessMessageDTO<>("Categoria atualizada com sucesso!", updatedCategory),
                 HttpStatus.OK
         );
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<SimpleMessage> deleteCategory(@PathVariable Long id){
+    public ResponseEntity<SimpleMessageDTO> deleteCategory(@PathVariable Long id){
         categoryService.delete(id);
         return new ResponseEntity<>(
-                new SimpleMessage("Categoria deletada!"),
+                new SimpleMessageDTO("Categoria deletada!"),
                 HttpStatus.OK
         );
     }

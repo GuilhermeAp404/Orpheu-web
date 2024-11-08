@@ -1,8 +1,8 @@
 package com.erp.management.controller;
 
-import com.erp.management.controller.DTOs.SimpleMessage;
-import com.erp.management.controller.DTOs.SuccessMessage;
-import com.erp.management.controller.DTOs.SupplierOrderList;
+import com.erp.management.controller.DTOs.SimpleMessageDTO;
+import com.erp.management.controller.DTOs.SuccessMessageDTO;
+import com.erp.management.controller.DTOs.SupplierOrderListDTO;
 import com.erp.management.domain.model.SupplierOrder;
 import com.erp.management.service.impl.SupplierOrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +20,20 @@ public class SupplierOrderController {
     private SupplierOrderServiceImpl supplierOrderService;
 
     @PostMapping
-    public ResponseEntity<SuccessMessage<SupplierOrder>> createSupplierOrder(@RequestBody SupplierOrder supplierOrder){
+    public ResponseEntity<SuccessMessageDTO<SupplierOrder>> createSupplierOrder(@RequestBody SupplierOrder supplierOrder){
         SupplierOrder createdSupplierOrder = supplierOrderService.save(supplierOrder);
 
         return new ResponseEntity<>(
-                new SuccessMessage("Você realizou uma entrade no estoque!", createdSupplierOrder),
+                new SuccessMessageDTO("Você realizou uma entrade no estoque!", createdSupplierOrder),
                 HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<SupplierOrderList> getAllSupplierOrders(){
+    public ResponseEntity<SupplierOrderListDTO> getAllSupplierOrders(){
         Iterable<SupplierOrder> supplierOrdersList = supplierOrderService.findAll();
 
         return new ResponseEntity<>(
-                new SupplierOrderList(supplierOrdersList),
+                new SupplierOrderListDTO(supplierOrdersList),
                 HttpStatus.OK
         );
     }
@@ -52,19 +52,19 @@ public class SupplierOrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SimpleMessage> updateSupplierOrder(@PathVariable Long id, @RequestBody SupplierOrder supplierOrder){
+    public ResponseEntity<SimpleMessageDTO> updateSupplierOrder(@PathVariable Long id, @RequestBody SupplierOrder supplierOrder){
         supplierOrderService.update(supplierOrder, id);
         return new ResponseEntity<>(
-                new SimpleMessage("Pedido de fornecedor alterado com successo!"),
+                new SimpleMessageDTO("Pedido de fornecedor alterado com successo!"),
                 HttpStatus.OK
         );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<SimpleMessage> deleteSupplierOrder(@PathVariable Long id){
+    public ResponseEntity<SimpleMessageDTO> deleteSupplierOrder(@PathVariable Long id){
         supplierOrderService.delete(id);
         return new ResponseEntity<>(
-                new SimpleMessage("Pedido de fornecedor deletado com sucesso!"),
+                new SimpleMessageDTO("Pedido de fornecedor deletado com sucesso!"),
                 HttpStatus.OK
         );
     }

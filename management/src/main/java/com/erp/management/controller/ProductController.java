@@ -1,9 +1,8 @@
 package com.erp.management.controller;
-import com.erp.management.controller.DTOs.ProductList;
-import com.erp.management.controller.DTOs.SimpleMessage;
-import com.erp.management.controller.DTOs.SuccessMessage;
+import com.erp.management.controller.DTOs.ProductListDTO;
+import com.erp.management.controller.DTOs.SimpleMessageDTO;
+import com.erp.management.controller.DTOs.SuccessMessageDTO;
 import com.erp.management.domain.model.Product;
-import com.erp.management.service.ProductService;
 import com.erp.management.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,19 +18,19 @@ public class ProductController {
     private ProductServiceImpl productService;
 
     @PostMapping
-    public ResponseEntity<SuccessMessage<Product>> createProduct(@RequestBody Product product){
+    public ResponseEntity<SuccessMessageDTO<Product>> createProduct(@RequestBody Product product){
         Product createdProduct = productService.save(product);
         return new ResponseEntity<>(
-                new SuccessMessage<>("Produto criado com sucesso!", createdProduct),
+                new SuccessMessageDTO<>("Produto criado com sucesso!", createdProduct),
                 HttpStatus.CREATED
         );
     };
 
     @GetMapping
-    public ResponseEntity<ProductList> getAllProducts(){
+    public ResponseEntity<ProductListDTO> getAllProducts(){
         Iterable<Product> productLists = productService.findAll();
         return new ResponseEntity<>(
-                new ProductList(productLists),
+                new ProductListDTO(productLists),
                 HttpStatus.OK
         );
     }
@@ -50,20 +49,20 @@ public class ProductController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<SuccessMessage<Product>> updateProduct(@RequestBody Product product, @PathVariable Long id){
+    public ResponseEntity<SuccessMessageDTO<Product>> updateProduct(@RequestBody Product product, @PathVariable Long id){
         Product updatedProduct = productService.update(product, id);
         return new ResponseEntity<>(
-                new SuccessMessage<>("Produto atualizado com sucesso!", updatedProduct),
+                new SuccessMessageDTO<>("Produto atualizado com sucesso!", updatedProduct),
                 HttpStatus.OK
         );
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<SimpleMessage> deleteProduct(@PathVariable Long id){
+    public ResponseEntity<SimpleMessageDTO> deleteProduct(@PathVariable Long id){
         productService.delete(id);
 
         return new ResponseEntity<>(
-                new SimpleMessage("Produto deletado!"),
+                new SimpleMessageDTO("Produto deletado!"),
                 HttpStatus.OK
         );
     }
