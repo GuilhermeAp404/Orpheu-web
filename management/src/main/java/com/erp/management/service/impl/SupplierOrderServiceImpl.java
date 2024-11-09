@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -28,6 +29,22 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
     private SupplierOrderProductRepository supplierOrderProductRepository;
     @Autowired
     private ProductRepository productRepository;
+
+
+    private void updateProductAmount(Product product, Integer quantity){
+        product.setAmount(product.getAmount()+quantity);
+        productRepository.save(product);
+    }
+
+    private void adjustStockToDelete(List<SupplierOrderProduct> supplierOrderProductList){
+        for (SupplierOrderProduct supplierOrderProduct:supplierOrderProductList){
+            Product productDb = productRepository.findById(supplierOrderProduct.getProduct().getId())
+                    .orElseThrow(()-> new NoSuchElementException("Esse produto não existe!"));
+
+            productDb.setAmount(productDb.getAmount() - supplierOrderProduct.getQuantity());
+            productRepository.save(productDb);
+        }
+    }
 
     @Override
     public Iterable<SupplierOrder> findAll() {
@@ -48,21 +65,16 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
         ));
 
         for (SupplierOrderProduct supplierOrderProduct:supplierOrder.getSupplierOrderProducts()){
-            Optional<Product> productDb = productRepository.findById(supplierOrderProduct.getProduct().getId());
-            if(productDb.isEmpty()){
-                throw new NoSuchElementException("Esse produto não existe!");
-            }
-
-            Product productToUpdate = productDb.get();
+            Product productDb = productRepository.findById(supplierOrderProduct.getProduct().getId())
+                    .orElseThrow(()-> new NoSuchElementException("Esse produto não existe!"));
 
             SupplierOrderProduct orderProduct = supplierOrderProductRepository.save(new SupplierOrderProduct(
                     createdSupplierOrder,
-                    supplierOrderProduct.getProduct(),
+                    productDb,
                     supplierOrderProduct.getQuantity()
             ));
 
-            productToUpdate.setAmount(productToUpdate.getAmount()+orderProduct.getQuantity());
-            productRepository.save(productToUpdate);
+            updateProductAmount(productDb, supplierOrderProduct.getQuantity());
         }
 
         return createdSupplierOrder;
@@ -72,42 +84,23 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SupplierOrder update(SupplierOrder supplierOrder, Long id) {
-        Optional<SupplierOrder> db= supplierOrderRepository.findById(id);
-        if(db.isEmpty()){
-            throw new NoSuchElementException("Esse pedido de fornecedor não existe!");
-        }
+        SupplierOrder supplierOrderDb= supplierOrderRepository.findById(id)
+                .orElseThrow(()-> new NoSuchElementException("Esse pedido de fornecedor não existe!"));
 
-        SupplierOrder supplierOrderDb = db.get();
-        for (SupplierOrderProduct supplierOrderProduct:supplierOrderDb.getSupplierOrderProducts()){
-            Optional<Product> productDb = productRepository.findById(supplierOrderProduct.getProduct().getId());
-            if(productDb.isEmpty()){
-                throw new NoSuchElementException("Esse produto não existe!");
-            }
-
-            Product product = productDb.get();
-            product.setAmount(product.getAmount() - supplierOrderProduct.getQuantity());
-
-            productRepository.save(product);
-        }
-
+        adjustStockToDelete(supplierOrderDb.getSupplierOrderProducts());
         supplierOrderProductRepository.deleteAllBySupplierOrder(id);
 
         for(SupplierOrderProduct supplierOrderProduct:supplierOrder.getSupplierOrderProducts()){
-            Optional<Product> productDb = productRepository.findById(supplierOrderProduct.getProduct().getId());
-            if(productDb.isEmpty()){
-                throw new NoSuchElementException("Esse produto não existe!");
-            }
+            Product productDb = productRepository.findById(supplierOrderProduct.getProduct().getId())
+                    .orElseThrow(()-> new NoSuchElementException("Esse produto não existe!"));
 
             SupplierOrderProduct orderProduct = supplierOrderProductRepository.save(new SupplierOrderProduct(
                     supplierOrderDb,
-                    supplierOrderProduct.getProduct(),
+                    productDb,
                     supplierOrderProduct.getQuantity()
             ));
 
-            Product productToUpdate = productDb.get();
-            productToUpdate.setAmount(productToUpdate.getAmount()+orderProduct.getQuantity());
-
-            productRepository.save(productToUpdate);
+            updateProductAmount(productDb, supplierOrderProduct.getQuantity());
         }
 
         if(!supplierOrderDb.getSupplier().equals(supplierOrder.getSupplier())){
@@ -122,32 +115,18 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
             supplierOrderDb.setTotal(supplierOrder.getTotal());
         }
 
-        supplierOrderDb = supplierOrderRepository.findById(id).get();
         return supplierOrderDb;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void delete(Long id) {
-        Optional<SupplierOrder> db= supplierOrderRepository.findById(id);
-        if(db.isEmpty()){
-            throw new NoSuchElementException("Esse pedido de fornecedor não existe!");
-        }
+        SupplierOrder supplierOrderDb= supplierOrderRepository.findById(id)
+                .orElseThrow(()-> new NoSuchElementException("Esse pedido de fornecedor não existe!"));
 
-        SupplierOrder supplierOrderDb = db.get();
-        for (SupplierOrderProduct supplierOrderProduct:supplierOrderDb.getSupplierOrderProducts()){
-            Optional<Product> productDb = productRepository.findById(supplierOrderProduct.getProduct().getId());
-            if(productDb.isEmpty()){
-                throw new NoSuchElementException("Esse produto não existe!");
-            }
-
-            Product product = productDb.get();
-            product.setAmount(product.getAmount() - supplierOrderProduct.getQuantity());
-
-            productRepository.save(product);
-        }
-
+        adjustStockToDelete(supplierOrderDb.getSupplierOrderProducts());
         supplierOrderProductRepository.deleteAllBySupplierOrder(id);
+
         supplierOrderRepository.deleteById(id);
     }
 }

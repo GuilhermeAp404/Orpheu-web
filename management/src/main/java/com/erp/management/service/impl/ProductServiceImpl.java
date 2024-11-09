@@ -31,12 +31,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product update(Product product, Long id) {
-        Optional<Product> db = productRepository.findById(id);
-        if(db.isEmpty()){
-            throw new NoSuchElementException("Esse produto não existe!");
-        }
+        Product productDb = productRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("Esse produto não existe!"));
 
-        Product productDb = db.get();
         if(!productDb.getProductName().equals(product.getProductName())){
             productDb.setProductName(product.getProductName());
         }
@@ -62,10 +59,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void delete(Long id) {
-        Optional<Product> db = productRepository.findById(id);
-        if(db.isEmpty()){
-            throw new NoSuchElementException("Esse produto não existe!");
-        }
+        Product productDb = productRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("Esse produto não existe!"));
 
         productRepository.deleteById(id);
     }

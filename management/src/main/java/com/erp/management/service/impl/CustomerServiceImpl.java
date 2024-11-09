@@ -31,12 +31,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer update(Customer customer, Long id) {
-        Optional<Customer> db = customerRepository.findById(id);
-        if(db.isEmpty()){
-            throw new NoSuchElementException("Esse cliente não existe!");
-        }
+        Customer customerDb = customerRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("Esse cliente não existe!"));
 
-        Customer customerDb = db.get();
         if(!customerDb.getCustomerName().equals(customer.getCustomerName())){
             customerDb.setCustomerName(customer.getCustomerName());
         }
@@ -54,10 +51,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void delete(Long id) {
-        Optional<Customer> db = customerRepository.findById(id);
-        if(db.isEmpty()){
-            throw new NoSuchElementException("Esse cliente não existe!");
-        }
+        Customer customerDb = customerRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("Esse cliente não existe!"));
 
         customerRepository.deleteById(id);
     }

@@ -30,7 +30,7 @@ public class SupplierOrder {
     @Column(name = "total", nullable = false)
     private Double total;
 
-    @OneToMany(mappedBy = "supplierOrder", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "supplierOrder", fetch = FetchType.LAZY ,cascade = CascadeType.PERSIST)
     private List<SupplierOrderProduct> supplierOrderProducts;
 
 

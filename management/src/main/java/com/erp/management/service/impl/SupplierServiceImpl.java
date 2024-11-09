@@ -35,12 +35,9 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Supplier update(Supplier supplier, Long id) {
-        Optional<Supplier> db = supplierRepository.findById(id);
-        if(db.isEmpty()){
-            throw new NoSuchElementException("Esse fornecedor não exist");
-        }
+        Supplier supplierDb = supplierRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("Esse fornecedor não existe!"));
 
-        Supplier supplierDb = db.get();
         if(!supplierDb.getSupplierName().equals(supplier.getSupplierName())){
             supplierDb.setSupplierName(supplier.getSupplierName());
         }
@@ -67,10 +64,8 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public void delete(Long id) {
-        Optional<Supplier> supplier = supplierRepository.findById(id);
-        if(supplier.isEmpty()){
-            throw new NoSuchElementException("Esse fornecedor não existe.");
-        }
+        Supplier supplierDb = supplierRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("Esse fornecedor não existe!"));
 
         supplierRepository.deleteById(id);
     }

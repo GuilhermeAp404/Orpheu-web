@@ -32,12 +32,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category update(Category category, Long id) {
-        Optional<Category> db = categoryRepository.findById(id);
-        if(db.isEmpty()){
-            throw new NoSuchElementException("Essa categoria não existe");
-        }
+        Category categoryDb = categoryRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("Essa categoria não existe"));
 
-        Category categoryDb = db.get();
         if (!categoryDb.getCategoryName().equals(category.getCategoryName())){
             categoryDb.setCategoryName(category.getCategoryName());
         }
@@ -47,10 +44,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void delete(Long id) {
-        Optional<Category> db = categoryRepository.findById(id);
-        if(db.isEmpty()){
-            throw new NoSuchElementException("Essa categoria não existe");
-        }
+        Category categoryDb = categoryRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("Essa categoria não existe"));
 
         categoryRepository.deleteById(id);
     }
