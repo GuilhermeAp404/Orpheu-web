@@ -7,15 +7,10 @@ import com.erp.management.domain.repository.ProductRepository;
 import com.erp.management.domain.repository.SupplierOrderProductRepository;
 import com.erp.management.domain.repository.SupplierOrderRepository;
 import com.erp.management.service.SupplierOrderService;
-import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -57,7 +52,7 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public SupplierOrder save(SupplierOrder supplierOrder) {
         SupplierOrder createdSupplierOrder = supplierOrderRepository.save(new SupplierOrder(
                 supplierOrder.getSupplier(),
@@ -68,7 +63,7 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
             Product productDb = productRepository.findById(supplierOrderProduct.getProduct().getId())
                     .orElseThrow(()-> new NoSuchElementException("Esse produto não existe!"));
 
-            SupplierOrderProduct orderProduct = supplierOrderProductRepository.save(new SupplierOrderProduct(
+            supplierOrderProductRepository.save(new SupplierOrderProduct(
                     createdSupplierOrder,
                     productDb,
                     supplierOrderProduct.getQuantity()
@@ -82,7 +77,7 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public SupplierOrder update(SupplierOrder supplierOrder, Long id) {
         SupplierOrder supplierOrderDb= supplierOrderRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("Esse pedido de fornecedor não existe!"));
@@ -94,17 +89,13 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
             Product productDb = productRepository.findById(supplierOrderProduct.getProduct().getId())
                     .orElseThrow(()-> new NoSuchElementException("Esse produto não existe!"));
 
-            SupplierOrderProduct orderProduct = supplierOrderProductRepository.save(new SupplierOrderProduct(
+            supplierOrderProductRepository.save(new SupplierOrderProduct(
                     supplierOrderDb,
                     productDb,
                     supplierOrderProduct.getQuantity()
             ));
 
             updateProductAmount(productDb, supplierOrderProduct.getQuantity());
-        }
-
-        if(!supplierOrderDb.getSupplier().equals(supplierOrder.getSupplier())){
-            supplierOrderDb.setSupplier(supplierOrder.getSupplier());
         }
 
         if(!supplierOrderDb.getSupplier().equals(supplierOrder.getSupplier())){
@@ -121,7 +112,7 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void delete(Long id) {
-        SupplierOrder supplierOrderDb= supplierOrderRepository.findById(id)
+        SupplierOrder supplierOrderDb = supplierOrderRepository.findById(id)
                 .orElseThrow(()-> new NoSuchElementException("Esse pedido de fornecedor não existe!"));
 
         adjustStockToDelete(supplierOrderDb.getSupplierOrderProducts());

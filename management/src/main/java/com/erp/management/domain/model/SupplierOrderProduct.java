@@ -2,15 +2,11 @@ package com.erp.management.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "supplier_order_products")
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class SupplierOrderProduct {
@@ -29,6 +25,13 @@ public class SupplierOrderProduct {
     private Integer quantity;
 
     public SupplierOrderProduct(SupplierOrder supplierOrder, Product product, Integer quantity) {
+        this.supplierOrder = supplierOrder;
+        this.product = product;
+        this.quantity = quantity;
+    }
+
+    public SupplierOrderProduct(Long id, SupplierOrder supplierOrder, Product product, Integer quantity) {
+        this.id = id;
         this.supplierOrder = supplierOrder;
         this.product = product;
         this.quantity = quantity;

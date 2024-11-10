@@ -1,9 +1,7 @@
 package com.erp.management.domain.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -11,8 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "supplier_orders")
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class SupplierOrder {
@@ -37,5 +33,12 @@ public class SupplierOrder {
     public SupplierOrder(Supplier supplier, Double total) {
         this.supplier = supplier;
         this.total = total;
+    }
+
+    public SupplierOrder(Supplier supplier, Long id, Double total, Date supplierOrderDate) {
+        this.supplier = supplier;
+        this.id = id;
+        this.total = total;
+        this.supplierOrderDate = supplierOrderDate;
     }
 }
