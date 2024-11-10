@@ -1,4 +1,6 @@
 package com.erp.management.domain.repository;
 
-public interface CustomerOrderRespository {
+import com.erp.management.domain.model.CustomerOrder;
+
+public interface CustomerOrderRespository extends BaseRespository<CustomerOrder, Long> {
 }

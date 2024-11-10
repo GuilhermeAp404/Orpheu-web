@@ -24,6 +24,7 @@ public class Customer {
 
     @Column(name = "phone",
             length = 11,
+            unique = true,
             nullable = false)
     private String phone;
 

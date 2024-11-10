@@ -20,11 +20,11 @@ public class SupplierOrderController {
     private SupplierOrderServiceImpl supplierOrderService;
 
     @PostMapping
-    public ResponseEntity<SuccessMessageDTO<SupplierOrder>> createSupplierOrder(@RequestBody SupplierOrder supplierOrder){
+    public ResponseEntity<SimpleMessageDTO> createSupplierOrder(@RequestBody SupplierOrder supplierOrder){
         SupplierOrder createdSupplierOrder = supplierOrderService.save(supplierOrder);
 
         return new ResponseEntity<>(
-                new SuccessMessageDTO("Você realizou uma entrade no estoque!", createdSupplierOrder),
+                new SimpleMessageDTO("Você realizou uma entrada no estoque!"),
                 HttpStatus.CREATED);
     }
 
@@ -42,7 +42,7 @@ public class SupplierOrderController {
     public ResponseEntity<SupplierOrder> getSupplierOrderById(@PathVariable Long id){
         Optional<SupplierOrder> supplierOrder = supplierOrderService.findById(id);
         if(supplierOrder.isEmpty()){
-            throw new NoSuchElementException("Pedido de fornecedor não foi encontrado");
+            throw new NoSuchElementException("Pedido do fornecedor não foi encontrado!");
         }
 
         return new ResponseEntity<>(
@@ -55,7 +55,7 @@ public class SupplierOrderController {
     public ResponseEntity<SimpleMessageDTO> updateSupplierOrder(@PathVariable Long id, @RequestBody SupplierOrder supplierOrder){
         supplierOrderService.update(supplierOrder, id);
         return new ResponseEntity<>(
-                new SimpleMessageDTO("Pedido de fornecedor alterado com successo!"),
+                new SimpleMessageDTO("Pedido do fornecedor alterado com successo!"),
                 HttpStatus.OK
         );
     }
@@ -64,7 +64,7 @@ public class SupplierOrderController {
     public ResponseEntity<SimpleMessageDTO> deleteSupplierOrder(@PathVariable Long id){
         supplierOrderService.delete(id);
         return new ResponseEntity<>(
-                new SimpleMessageDTO("Pedido de fornecedor deletado com sucesso!"),
+                new SimpleMessageDTO("Pedido do fornecedor deletado com sucesso!"),
                 HttpStatus.OK
         );
     }
