@@ -1,18 +1,18 @@
 package com.erp.management.domain.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "supplier_orders")
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SupplierOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

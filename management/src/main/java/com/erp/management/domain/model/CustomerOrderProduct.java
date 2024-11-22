@@ -2,15 +2,15 @@ package com.erp.management.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "customer_order_products")
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CustomerOrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
