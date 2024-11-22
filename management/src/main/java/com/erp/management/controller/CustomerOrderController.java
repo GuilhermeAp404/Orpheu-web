@@ -1,7 +1,7 @@
 package com.erp.management.controller;
 
 import com.erp.management.DTOs.CustomerOrderDTO;
-import com.erp.management.DTOs.old.SimpleMessageDTO;
+import com.erp.management.DTOs.SimpleMessageDTO;
 import com.erp.management.mapper.CustomerOrderMapper;
 import com.erp.management.service.impl.CustomerOrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

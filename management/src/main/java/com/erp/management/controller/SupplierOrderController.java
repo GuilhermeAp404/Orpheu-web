@@ -1,7 +1,7 @@
 package com.erp.management.controller;
 
 import com.erp.management.DTOs.SupplierOrderDTO;
-import com.erp.management.DTOs.old.SimpleMessageDTO;
+import com.erp.management.DTOs.SimpleMessageDTO;
 import com.erp.management.mapper.SupplierOrderMapper;
 import com.erp.management.service.impl.SupplierOrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/supplier/order")
