@@ -1,4 +1,4 @@
-package com.erp.management.controller.DTOs;
+package com.erp.management.DTOs.old;
 
 public record CreatedOrderDTO(String message, Long OrderId) {
 }

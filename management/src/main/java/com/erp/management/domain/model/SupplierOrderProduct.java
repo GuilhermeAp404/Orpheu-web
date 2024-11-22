@@ -23,13 +23,18 @@ public class SupplierOrderProduct {
     @ManyToOne
     private Product product;
 
+
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
+
+    @Column(name = "total_cost", nullable = false)
+    private Double totalCost;
 
     public SupplierOrderProduct(SupplierOrder supplierOrder, Product product, Integer quantity) {
         this.supplierOrder = supplierOrder;
         this.product = product;
         this.quantity = quantity;
+        this.totalCost = quantity * product.getCostPrice();
     }
 
     public SupplierOrderProduct(Long id, SupplierOrder supplierOrder, Product product, Integer quantity) {
@@ -37,5 +42,6 @@ public class SupplierOrderProduct {
         this.supplierOrder = supplierOrder;
         this.product = product;
         this.quantity = quantity;
+        this.totalCost = quantity * product.getCostPrice();
     }
 }

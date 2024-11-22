@@ -1,9 +1,8 @@
 package com.erp.management.controller;
 
-import com.erp.management.controller.DTOs.CustomerListDTO;
-import com.erp.management.controller.DTOs.SimpleMessageDTO;
-import com.erp.management.controller.DTOs.SuccessMessageDTO;
-import com.erp.management.domain.model.Customer;
+import com.erp.management.DTOs.CustomerDTO;
+import com.erp.management.DTOs.old.SimpleMessageDTO;
+import com.erp.management.mapper.CustomerMapper;
 import com.erp.management.service.impl.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,40 +18,51 @@ public class CustomerController {
     private CustomerServiceImpl customerService;
 
     @PostMapping
-    public ResponseEntity<SuccessMessageDTO<Customer>> createCustomer(@RequestBody Customer customer){
-        Customer createdCustomer = customerService.save(customer);
+    public ResponseEntity<SimpleMessageDTO> createCustomer(@RequestBody CustomerDTO customerDTO){
+        customerService.save(
+                CustomerMapper.INSTANCE.customerDtoToCustomer(customerDTO)
+        );
+
         return new ResponseEntity<>(
-                new SuccessMessageDTO<>("Cliente criado com sucesso!", createdCustomer),
+                new SimpleMessageDTO("Cliente criado com sucesso!"),
                 HttpStatus.CREATED
         );
     }
 
     @GetMapping
-    public ResponseEntity<CustomerListDTO> getAllCustomers(){
-        Iterable<Customer> customersList = customerService.findAll();
+    public ResponseEntity<Iterable<CustomerDTO>> getAllCustomers(){
+        var customersList = CustomerMapper.INSTANCE.customerListTocustomerDtoList(
+                customerService.findAll()
+        );
+
         return new ResponseEntity<>(
-                new CustomerListDTO(customersList),
+                customersList,
                 HttpStatus.OK
         );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id){
-        var customer = customerService.findById(id);
-        if(customer.isEmpty()){
-            throw new NoSuchElementException("Esse cliente não existe");
-        }
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id){
+        var customer = CustomerMapper.INSTANCE.customerToCustomerDto(
+                customerService.findById(id)
+                        .orElseThrow(() -> new NoSuchElementException("Esse cliente não existe"))
+        );
+
         return new ResponseEntity<>(
-                customer.get(),
+                customer,
                 HttpStatus.OK
         );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SuccessMessageDTO<Customer>> updateCustomer(@PathVariable Long id, @RequestBody Customer customer){
-        Customer updateCustomer = customerService.update(customer, id);
+    public ResponseEntity<SimpleMessageDTO> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO){
+        customerService.update(
+                CustomerMapper.INSTANCE.customerDtoToCustomer(customerDTO),
+                id
+        );
+
         return new ResponseEntity<>(
-                new SuccessMessageDTO<>("Cliente atualizado com sucesso!", updateCustomer),
+                new SimpleMessageDTO("Cliente atualizado com sucesso!"),
                 HttpStatus.OK
         );
     }

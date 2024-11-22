@@ -3,7 +3,6 @@ package com.erp.management.service.impl;
 import com.erp.management.domain.model.*;
 import com.erp.management.domain.repository.*;
 import com.erp.management.service.CustomerOrderService;
-import com.erp.management.service.SupplierOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

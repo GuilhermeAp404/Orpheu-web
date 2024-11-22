@@ -1,4 +1,4 @@
-package com.erp.management.controller.DTOs;
+package com.erp.management.DTOs.old;
 
 
 import com.erp.management.domain.model.SupplierOrder;

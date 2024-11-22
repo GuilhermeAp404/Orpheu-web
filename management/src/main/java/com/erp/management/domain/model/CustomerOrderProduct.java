@@ -26,10 +26,14 @@ public class CustomerOrderProduct {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+    @Column(name = "total_cost", nullable = false)
+    private Double totalCost;
+
     public CustomerOrderProduct(CustomerOrder customerOrder, Product product, Integer quantity) {
         this.customerOrder = customerOrder;
         this.product = product;
         this.quantity = quantity;
+        this.totalCost = quantity * product.getSellingPrice();
     }
 
     public CustomerOrderProduct(Long id, CustomerOrder customerOrder, Product product, Integer quantity) {
@@ -37,5 +41,6 @@ public class CustomerOrderProduct {
         this.customerOrder = customerOrder;
         this.product = product;
         this.quantity = quantity;
+        this.totalCost = quantity * product.getSellingPrice();
     }
 }

@@ -1,7 +1,7 @@
 package com.erp.management.controller;
 
-import com.erp.management.controller.DTOs.AuthDTO;
-import com.erp.management.controller.DTOs.LoginDTO;
+import com.erp.management.DTOs.auth.AuthDTO;
+import com.erp.management.DTOs.auth.LoginDTO;
 import com.erp.management.security.TokenService;
 import com.erp.management.security.UserDetailsImpl;
 import com.erp.management.security.UserDetailsServiceImpl;

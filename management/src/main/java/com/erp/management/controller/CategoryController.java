@@ -1,9 +1,8 @@
 package com.erp.management.controller;
 
-import com.erp.management.controller.DTOs.CategoryListDTO;
-import com.erp.management.controller.DTOs.SimpleMessageDTO;
-import com.erp.management.controller.DTOs.SuccessMessageDTO;
-import com.erp.management.domain.model.Category;
+import com.erp.management.DTOs.CategoryDTO;
+import com.erp.management.DTOs.old.SimpleMessageDTO;
+import com.erp.management.mapper.CategoryMapper;
 import com.erp.management.service.impl.CategoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,41 +18,51 @@ public class CategoryController {
     private CategoryServiceImpl categoryService;
 
     @PostMapping
-    public ResponseEntity<SuccessMessageDTO<Category>> createCategory(@RequestBody Category category){
-        Category createdCategory = categoryService.save(category);
+    public ResponseEntity<SimpleMessageDTO> createCategory(@RequestBody CategoryDTO categoryDTO){
+        categoryService.save(
+                CategoryMapper.INSTANCE.categoryDtoToCategory(categoryDTO)
+        );
+
         return new ResponseEntity<>(
-                new SuccessMessageDTO<>("Categoria criada com sucesso!", createdCategory),
+                new SimpleMessageDTO("Categoria criada com sucesso!"),
                 HttpStatus.CREATED
         );
     };
 
     @GetMapping
-    public ResponseEntity<CategoryListDTO> getAllCategories(){
-        Iterable<Category> categoryList = categoryService.findAll();
+    public ResponseEntity<Iterable<CategoryDTO>> getAllCategories(){
+        var categoryList = CategoryMapper.INSTANCE.categoryListToCategoryDtoList(
+                categoryService.findAll()
+        );
+
         return new ResponseEntity<>(
-                new CategoryListDTO(categoryList),
+                categoryList,
                 HttpStatus.OK
         );
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long id){
-        var category = categoryService.findById(id);
-        if(category.isEmpty()){
-            throw new NoSuchElementException("Essa categoria não existe");
-        }
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id){
+        var category = CategoryMapper.INSTANCE.categoryToCategoryDto(
+                categoryService.findById(id)
+                        .orElseThrow(()->new NoSuchElementException("Essa categoria não existe"))
+        );
 
         return new ResponseEntity<>(
-                category.get(),
+                category,
                 HttpStatus.OK
         );
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<SuccessMessageDTO<Category>> updateCategory(@RequestBody Category category, @PathVariable Long id){
-        Category updatedCategory = categoryService.update(category, id);
+    public ResponseEntity<SimpleMessageDTO> updateCategory(@RequestBody CategoryDTO categoryDTO, @PathVariable Long id){
+        categoryService.update(
+                CategoryMapper.INSTANCE.categoryDtoToCategory(categoryDTO),
+                id
+        );
+
         return new ResponseEntity<>(
-                new SuccessMessageDTO<>("Categoria atualizada com sucesso!", updatedCategory),
+                new SimpleMessageDTO("Categoria atualizada com sucesso!"),
                 HttpStatus.OK
         );
     }

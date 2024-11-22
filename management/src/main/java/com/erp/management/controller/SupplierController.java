@@ -1,9 +1,8 @@
 package com.erp.management.controller;
 
-import com.erp.management.controller.DTOs.SimpleMessageDTO;
-import com.erp.management.controller.DTOs.SuccessMessageDTO;
-import com.erp.management.controller.DTOs.SupplierListDTO;
-import com.erp.management.domain.model.Supplier;
+import com.erp.management.DTOs.SupplierDTO;
+import com.erp.management.DTOs.old.SimpleMessageDTO;
+import com.erp.management.mapper.SupplierMapper;
 import com.erp.management.service.impl.SupplierServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,40 +18,50 @@ public class SupplierController {
     private SupplierServiceImpl supplierService;
 
     @PostMapping
-    public ResponseEntity<SuccessMessageDTO<Supplier>> createSupplier(@RequestBody Supplier supplier){
-        Supplier createdSupplier = supplierService.save(supplier);
+    public ResponseEntity<SimpleMessageDTO> createSupplier(@RequestBody SupplierDTO supplierDTO){
+        supplierService.save(
+                SupplierMapper.INSTANCE.supplierDtoToSupplier(supplierDTO)
+        );
+
         return new ResponseEntity<>(
-                new SuccessMessageDTO<>("Fornecedor criado com sucesso!", createdSupplier),
+                new SimpleMessageDTO("Fornecedor criado com sucesso!"),
                 HttpStatus.CREATED
         );
     }
     @GetMapping
-    public ResponseEntity<SupplierListDTO> getAllSuppliers(){
-        Iterable<Supplier> suppliersList = supplierService.findAll();
+    public ResponseEntity<Iterable<SupplierDTO>> getAllSuppliers(){
+        var suppliersList = SupplierMapper.INSTANCE.supplierListToSupplierDtoList(
+                supplierService.findAll()
+        );
+
         return new ResponseEntity<>(
-                new SupplierListDTO(suppliersList),
+                suppliersList,
                 HttpStatus.OK
         );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Supplier> getSupplierById(@PathVariable Long id){
-        var supplier = supplierService.findById(id);
-        if(supplier.isEmpty()){
-            throw new NoSuchElementException("Esse fornecedor não existe.");
-        }
+    public ResponseEntity<SupplierDTO> getSupplierById(@PathVariable Long id){
+        var supplier = SupplierMapper.INSTANCE.supplierToSupplierDto(
+                supplierService.findById(id)
+                        .orElseThrow(()->new NoSuchElementException("Esse fornecedor não existe."))
+        );
 
         return new ResponseEntity<>(
-                supplier.get(),
+                supplier,
                 HttpStatus.OK
         );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SuccessMessageDTO<Supplier>> updateSupplier(@PathVariable Long id, @RequestBody Supplier supplier){
-        Supplier updatedSupplier = supplierService.update(supplier, id);
+    public ResponseEntity<SimpleMessageDTO> updateSupplier(@PathVariable Long id, @RequestBody SupplierDTO supplierDTO){
+        var updatedSupplier = supplierService.update(
+                SupplierMapper.INSTANCE.supplierDtoToSupplier(supplierDTO),
+                id
+        );
+
         return new ResponseEntity<>(
-                new SuccessMessageDTO<>("Fornecerdor atualizado com sucesso!", updatedSupplier),
+                new SimpleMessageDTO("Fornecerdor atualizado com sucesso!"),
                 HttpStatus.OK
         );
     }
