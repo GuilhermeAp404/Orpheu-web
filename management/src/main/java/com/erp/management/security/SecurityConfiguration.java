@@ -23,6 +23,22 @@ public class SecurityConfiguration {
     @Autowired
     private SecurityFilter securityFilter;
 
+    private static final String[] ENDPOINTS = {
+            "/category",
+            "/category/**",
+            "/product",
+            "/product/**",
+            "/customer",
+            "/customer/**",
+            "/supplier",
+            "/supplier/**",
+            "/supplier/order",
+            "/supplier/order/**",
+            "/customer/order",
+            "/customer/order/**"
+
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
@@ -31,9 +47,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(ENDPOINTS).hasRole("ADMIN")
+                        .anyRequest().denyAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 

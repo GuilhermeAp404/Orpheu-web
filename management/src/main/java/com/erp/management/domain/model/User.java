@@ -1,5 +1,6 @@
 package com.erp.management.domain.model;
 
+import com.erp.management.enuns.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,5 +31,5 @@ public class User {
 
     @Column(name = "role",
             nullable = false)
-    private String role;
+    private UserRole role;
 }
