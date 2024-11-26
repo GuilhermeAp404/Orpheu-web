@@ -3,7 +3,7 @@ package com.erp.management.service.impl;
 import com.erp.management.domain.model.Supplier;
 import com.erp.management.domain.repository.SupplierRepository;
 import com.erp.management.service.SupplierService;
-import com.erp.management.service.exceptions.InvalidSupplierRegister;
+import com.erp.management.exception.InvalidSupplierRegister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

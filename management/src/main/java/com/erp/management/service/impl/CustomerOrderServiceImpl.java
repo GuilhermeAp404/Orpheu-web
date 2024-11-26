@@ -2,6 +2,7 @@ package com.erp.management.service.impl;
 
 import com.erp.management.domain.model.*;
 import com.erp.management.domain.repository.*;
+import com.erp.management.exception.UnavaliableAmount;
 import com.erp.management.service.CustomerOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,9 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
 
 
     private void updateProductAmount(Product product, Integer quantity){
-        product.setAmount(product.getAmount()-quantity);
+        if(product.getAmount() < quantity) throw new UnavaliableAmount();
+
+        product.setAmount(product.getAmount() - quantity);
         productRepository.save(product);
     }
 
@@ -51,20 +54,27 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public CustomerOrder save(CustomerOrder customerOrder) {
-        CustomerOrder createdCustomerOrder = customerOrderRepository.save(new CustomerOrder(
-                customerOrder.getCustomer(),
-                customerOrder.getTotal()
-        ));
+        CustomerOrder createdCustomerOrder = CustomerOrder.builder()
+                .customer(customerOrder.getCustomer())
+                .total(customerOrder.getTotal())
+                .build();
+
+        customerOrderRepository.save(createdCustomerOrder);
 
         for (CustomerOrderProduct customerOrderProduct:customerOrder.getCustomerOrderProducts()){
             Product productDb = productRepository.findById(customerOrderProduct.getProduct().getId())
                     .orElseThrow(()-> new NoSuchElementException("Esse produto não existe!"));
 
-            customerOrderProductRepository.save(new CustomerOrderProduct(
-                    createdCustomerOrder,
-                    productDb,
-                    customerOrderProduct.getQuantity()
-            ));
+            Double totalCost = productDb.getSellingPrice() * customerOrderProduct.getQuantity();
+
+            CustomerOrderProduct orderProduct = CustomerOrderProduct.builder()
+                    .product(productDb)
+                    .customerOrder(createdCustomerOrder)
+                    .quantity(customerOrderProduct.getQuantity())
+                    .totalCost(totalCost)
+                    .build();
+
+            customerOrderProductRepository.save(orderProduct);
 
             updateProductAmount(productDb, customerOrderProduct.getQuantity());
         }
@@ -86,11 +96,16 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
             Product productDb = productRepository.findById(customerOrderProduct.getProduct().getId())
                     .orElseThrow(()-> new NoSuchElementException("Esse produto não existe!"));
 
-            customerOrderProductRepository.save(new CustomerOrderProduct(
-                    customerOrderDb,
-                    productDb,
-                    customerOrderProduct.getQuantity()
-            ));
+            Double totalCost = productDb.getSellingPrice() * customerOrderProduct.getQuantity();
+
+            CustomerOrderProduct orderProduct = CustomerOrderProduct.builder()
+                    .product(productDb)
+                    .customerOrder(customerOrderDb)
+                    .quantity(customerOrderProduct.getQuantity())
+                    .totalCost(totalCost)
+                    .build();
+
+            customerOrderProductRepository.save(orderProduct);
 
             updateProductAmount(productDb, customerOrderProduct.getQuantity());
         }
