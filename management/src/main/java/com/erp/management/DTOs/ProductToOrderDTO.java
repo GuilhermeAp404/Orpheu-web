@@ -5,6 +5,5 @@ public record ProductToOrderDTO(
         String productName,
         CategoryDTO category,
         Double costPrice,
-        Double sellingPrice
-) {
+        Double sellingPrice) {
 }

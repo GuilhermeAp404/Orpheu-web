@@ -4,6 +4,7 @@ import com.erp.management.DTOs.CustomerDTO;
 import com.erp.management.DTOs.SimpleMessageDTO;
 import com.erp.management.mapper.CustomerMapper;
 import com.erp.management.service.impl.CustomerServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class CustomerController {
     private CustomerServiceImpl customerService;
 
     @PostMapping
-    public ResponseEntity<SimpleMessageDTO> createCustomer(@RequestBody CustomerDTO customerDTO){
+    public ResponseEntity<SimpleMessageDTO> createCustomer(@Valid @RequestBody CustomerDTO customerDTO){
         customerService.save(
                 CustomerMapper.INSTANCE.customerDtoToCustomer(customerDTO)
         );
@@ -55,7 +56,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SimpleMessageDTO> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO){
+    public ResponseEntity<SimpleMessageDTO> updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerDTO customerDTO){
         customerService.update(
                 CustomerMapper.INSTANCE.customerDtoToCustomer(customerDTO),
                 id

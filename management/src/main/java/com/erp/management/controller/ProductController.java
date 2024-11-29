@@ -3,6 +3,7 @@ import com.erp.management.DTOs.ProductDTO;
 import com.erp.management.DTOs.SimpleMessageDTO;
 import com.erp.management.mapper.ProductMapper;
 import com.erp.management.service.impl.ProductServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class ProductController {
     private ProductServiceImpl productService;
 
     @PostMapping
-    public ResponseEntity<SimpleMessageDTO> createProduct(@RequestBody ProductDTO productDTO){
+    public ResponseEntity<SimpleMessageDTO> createProduct(@Valid @RequestBody ProductDTO productDTO){
         productService.save(
                 ProductMapper.INSTANCE.productDtoToProduct(productDTO)
         );
@@ -53,7 +54,7 @@ public class ProductController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<SimpleMessageDTO> updateProduct(@RequestBody ProductDTO productDTO, @PathVariable Long id){
+    public ResponseEntity<SimpleMessageDTO> updateProduct(@Valid @RequestBody ProductDTO productDTO, @PathVariable Long id){
         productService.update(
                 ProductMapper.INSTANCE.productDtoToProduct(productDTO),
                 id

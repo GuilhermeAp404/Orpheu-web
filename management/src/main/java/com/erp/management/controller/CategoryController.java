@@ -4,6 +4,7 @@ import com.erp.management.DTOs.CategoryDTO;
 import com.erp.management.DTOs.SimpleMessageDTO;
 import com.erp.management.mapper.CategoryMapper;
 import com.erp.management.service.impl.CategoryServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class CategoryController {
     private CategoryServiceImpl categoryService;
 
     @PostMapping
-    public ResponseEntity<SimpleMessageDTO> createCategory(@RequestBody CategoryDTO categoryDTO){
+    public ResponseEntity<SimpleMessageDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
         categoryService.save(
                 CategoryMapper.INSTANCE.categoryDtoToCategory(categoryDTO)
         );
@@ -55,7 +56,7 @@ public class CategoryController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<SimpleMessageDTO> updateCategory(@RequestBody CategoryDTO categoryDTO, @PathVariable Long id){
+    public ResponseEntity<SimpleMessageDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long id){
         categoryService.update(
                 CategoryMapper.INSTANCE.categoryDtoToCategory(categoryDTO),
                 id

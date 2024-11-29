@@ -4,6 +4,7 @@ import com.erp.management.DTOs.SupplierDTO;
 import com.erp.management.DTOs.SimpleMessageDTO;
 import com.erp.management.mapper.SupplierMapper;
 import com.erp.management.service.impl.SupplierServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class SupplierController {
     private SupplierServiceImpl supplierService;
 
     @PostMapping
-    public ResponseEntity<SimpleMessageDTO> createSupplier(@RequestBody SupplierDTO supplierDTO){
+    public ResponseEntity<SimpleMessageDTO> createSupplier(@Valid @RequestBody SupplierDTO supplierDTO){
         supplierService.save(
                 SupplierMapper.INSTANCE.supplierDtoToSupplier(supplierDTO)
         );
@@ -54,7 +55,7 @@ public class SupplierController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SimpleMessageDTO> updateSupplier(@PathVariable Long id, @RequestBody SupplierDTO supplierDTO){
+    public ResponseEntity<SimpleMessageDTO> updateSupplier(@PathVariable Long id, @Valid @RequestBody SupplierDTO supplierDTO){
         var updatedSupplier = supplierService.update(
                 SupplierMapper.INSTANCE.supplierDtoToSupplier(supplierDTO),
                 id

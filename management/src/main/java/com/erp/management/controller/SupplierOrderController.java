@@ -4,6 +4,7 @@ import com.erp.management.DTOs.SupplierOrderDTO;
 import com.erp.management.DTOs.SimpleMessageDTO;
 import com.erp.management.mapper.SupplierOrderMapper;
 import com.erp.management.service.impl.SupplierOrderServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class SupplierOrderController {
     private SupplierOrderServiceImpl supplierOrderService;
 
     @PostMapping
-    public ResponseEntity<SimpleMessageDTO> createSupplierOrder(@RequestBody SupplierOrderDTO supplierOrderDTO){
+    public ResponseEntity<SimpleMessageDTO> createSupplierOrder(@Valid @RequestBody SupplierOrderDTO supplierOrderDTO){
         supplierOrderService.save(
                 SupplierOrderMapper.INSTANCE.supplierOrderDtoToSupplierOrder(supplierOrderDTO)
         );
@@ -55,7 +56,7 @@ public class SupplierOrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SimpleMessageDTO> updateSupplierOrder(@PathVariable Long id, @RequestBody SupplierOrderDTO supplierOrderDTO){
+    public ResponseEntity<SimpleMessageDTO> updateSupplierOrder(@PathVariable Long id, @Valid @RequestBody SupplierOrderDTO supplierOrderDTO){
         supplierOrderService.update(
                 SupplierOrderMapper.INSTANCE.supplierOrderDtoToSupplierOrder(supplierOrderDTO),
                 id

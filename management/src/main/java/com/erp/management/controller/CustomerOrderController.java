@@ -4,6 +4,7 @@ import com.erp.management.DTOs.CustomerOrderDTO;
 import com.erp.management.DTOs.SimpleMessageDTO;
 import com.erp.management.mapper.CustomerOrderMapper;
 import com.erp.management.service.impl.CustomerOrderServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class CustomerOrderController {
     private CustomerOrderServiceImpl customerOrderService;
 
     @PostMapping
-    public ResponseEntity<SimpleMessageDTO> createCustomerOrder(@RequestBody CustomerOrderDTO customerOrderDTO){
+    public ResponseEntity<SimpleMessageDTO> createCustomerOrder(@Valid @RequestBody CustomerOrderDTO customerOrderDTO){
         customerOrderService.save(
                 CustomerOrderMapper.INSTANCE.customerOrderDtoToCustomerOrder(customerOrderDTO)
         );
@@ -54,7 +55,7 @@ public class CustomerOrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SimpleMessageDTO> updateCustomerOrder(@PathVariable Long id, @RequestBody CustomerOrderDTO customerOrderDTO){
+    public ResponseEntity<SimpleMessageDTO> updateCustomerOrder(@PathVariable Long id, @Valid @RequestBody CustomerOrderDTO customerOrderDTO){
         customerOrderService.update(
                 CustomerOrderMapper.INSTANCE.customerOrderDtoToCustomerOrder(customerOrderDTO),
                 id
