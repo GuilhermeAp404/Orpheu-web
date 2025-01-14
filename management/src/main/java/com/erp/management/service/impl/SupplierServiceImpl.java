@@ -27,7 +27,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Supplier save(Supplier supplier) {
-        if(supplier.getSupplierRegister().length()!=14){
+        if(supplier.getRegister().length()!=14){
             throw new InvalidSupplierRegister("O registro fiscal do fornecedor não foi preenchido corretamente");
         }
         return supplierRepository.save(supplier);
@@ -38,16 +38,16 @@ public class SupplierServiceImpl implements SupplierService {
         Supplier supplierDb = supplierRepository.findById(id)
                 .orElseThrow(()->new NoSuchElementException("Esse fornecedor não existe!"));
 
-        if(!supplierDb.getSupplierName().equals(supplier.getSupplierName())){
-            supplierDb.setSupplierName(supplier.getSupplierName());
+        if(!supplierDb.getName().equals(supplier.getName())){
+            supplierDb.setName(supplier.getName());
         }
 
-        if(!supplierDb.getSupplierRegister().equals(supplier.getSupplierRegister())){
-            if(supplier.getSupplierRegister().length()!=14){
+        if(!supplierDb.getRegister().equals(supplier.getRegister())){
+            if(supplier.getRegister().length()!=14){
                 throw new InvalidSupplierRegister("O registro fiscal do fornecedor não foi preenchido corretamente");
             }
 
-            supplierDb.setSupplierRegister(supplier.getSupplierRegister());
+            supplierDb.setRegister(supplier.getRegister());
         }
 
         if(!supplierDb.getPhone().equals(supplier.getPhone())){
