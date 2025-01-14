@@ -8,8 +8,11 @@ import com.erp.management.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping(value = "/auth")
@@ -27,8 +30,17 @@ public class AuthController {
 
         if(passwordEncoder.matches(login.password(), user.getPassword())){
             String token = tokenService.createToken(user);
-            return new ResponseEntity<>(new AuthDTO(true, token), HttpStatus.OK);
+            return new ResponseEntity<>(
+                    new AuthDTO(
+                            user.getUser().getId(), user.getUser().getUsername(), user.getUser().getEmail(),
+                            token
+                    ), HttpStatus.OK);
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity checkUser(){
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
