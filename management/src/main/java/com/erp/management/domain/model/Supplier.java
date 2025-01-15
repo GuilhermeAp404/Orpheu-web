@@ -1,46 +1,21 @@
 package com.erp.management.domain.model;
 
+import com.erp.management.domain.model.base.Person;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Entity
 @Table(name = "suppliers")
+@Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@SuperBuilder
 @AllArgsConstructor
-public class Supplier {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "supplier_name",
-            length = 65,
-            nullable = false)
-    private String supplierName;
-
-    @Column(name = "supplier_register",
+@NoArgsConstructor
+public class Supplier extends Person {
+    @Column(name = "register",
             length = 14,
             unique = true,
             nullable = false)
-    private String supplierRegister;
-
-    @Column(name = "phone",
-            length = 11,
-            nullable = false)
-    private String phone;
-
-    @Column(name = "address",
-            nullable = false)
-    private String address;
-
-    public Supplier(String supplierName, String supplierRegister, String phone, String address) {
-        this.supplierName = supplierName;
-        this.supplierRegister = supplierRegister;
-        this.phone = phone;
-        this.address = address;
-    }
+    private String register;
 }

@@ -13,6 +13,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 
 @Configuration
@@ -28,9 +29,14 @@ public class JpaConfig {
         vendorAdapter.setGenerateDdl(true);
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("com.erp.management.domain");
         factory.setDataSource(dataSource);
+
+        Properties jpaProperties = new Properties();
+        jpaProperties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+        factory.setJpaProperties(jpaProperties);
 
         return factory;
     }

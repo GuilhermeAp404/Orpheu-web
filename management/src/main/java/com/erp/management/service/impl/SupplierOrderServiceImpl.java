@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
 
 
     private void updateProductAmount(Product product, Integer quantity){
-        product.setAmount(product.getAmount()+quantity);
+        product.setAmount(product.getAmount() + quantity);
         productRepository.save(product);
     }
 
@@ -54,20 +55,28 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public SupplierOrder save(SupplierOrder supplierOrder) {
-        SupplierOrder createdSupplierOrder = supplierOrderRepository.save(new SupplierOrder(
-                supplierOrder.getSupplier(),
-                supplierOrder.getTotal()
-        ));
+        SupplierOrder createdSupplierOrder = SupplierOrder.builder()
+                .supplier(supplierOrder.getSupplier())
+                .total(supplierOrder.getTotal())
+                .orderDate(new Date())
+                .build();
+
+        supplierOrderRepository.save(createdSupplierOrder);
 
         for (SupplierOrderProduct supplierOrderProduct:supplierOrder.getSupplierOrderProducts()){
             Product productDb = productRepository.findById(supplierOrderProduct.getProduct().getId())
                     .orElseThrow(()-> new NoSuchElementException("Esse produto não existe!"));
 
-            supplierOrderProductRepository.save(new SupplierOrderProduct(
-                    createdSupplierOrder,
-                    productDb,
-                    supplierOrderProduct.getQuantity()
-            ));
+            Double totalCost = productDb.getCostPrice() * supplierOrderProduct.getQuantity();
+
+            SupplierOrderProduct orderProduct = SupplierOrderProduct.builder()
+                    .supplierOrder(createdSupplierOrder)
+                    .product(productDb)
+                    .quantity(supplierOrderProduct.getQuantity())
+                    .totalCost(totalCost)
+                    .build();
+
+            supplierOrderProductRepository.save(orderProduct);
 
             updateProductAmount(productDb, supplierOrderProduct.getQuantity());
         }
@@ -89,11 +98,16 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
             Product productDb = productRepository.findById(supplierOrderProduct.getProduct().getId())
                     .orElseThrow(()-> new NoSuchElementException("Esse produto não existe!"));
 
-            supplierOrderProductRepository.save(new SupplierOrderProduct(
-                    supplierOrderDb,
-                    productDb,
-                    supplierOrderProduct.getQuantity()
-            ));
+            Double totalCost = productDb.getCostPrice() * supplierOrderProduct.getQuantity();
+
+            SupplierOrderProduct orderProduct = SupplierOrderProduct.builder()
+                    .supplierOrder(supplierOrderDb)
+                    .product(productDb)
+                    .quantity(supplierOrderProduct.getQuantity())
+                    .totalCost(totalCost)
+                    .build();
+
+            supplierOrderProductRepository.save(orderProduct);
 
             updateProductAmount(productDb, supplierOrderProduct.getQuantity());
         }

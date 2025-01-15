@@ -34,8 +34,8 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customerDb = customerRepository.findById(id)
                 .orElseThrow(()->new NoSuchElementException("Esse cliente não existe!"));
 
-        if(!customerDb.getCustomerName().equals(customer.getCustomerName())){
-            customerDb.setCustomerName(customer.getCustomerName());
+        if(!customerDb.getName().equals(customer.getName())){
+            customerDb.setName(customer.getName());
         }
 
         if(!customerDb.getPhone().equals(customer.getPhone())){

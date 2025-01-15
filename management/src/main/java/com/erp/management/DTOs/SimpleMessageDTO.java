@@ -1,4 +1,4 @@
-package com.erp.management.controller.DTOs;
+package com.erp.management.DTOs;
 
 public record SimpleMessageDTO(String message) {
 }

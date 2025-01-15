@@ -1,9 +1,9 @@
 package com.erp.management.controller;
-import com.erp.management.controller.DTOs.ProductListDTO;
-import com.erp.management.controller.DTOs.SimpleMessageDTO;
-import com.erp.management.controller.DTOs.SuccessMessageDTO;
-import com.erp.management.domain.model.Product;
+import com.erp.management.DTOs.ProductDTO;
+import com.erp.management.DTOs.SimpleMessageDTO;
+import com.erp.management.mapper.ProductMapper;
 import com.erp.management.service.impl.ProductServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,43 +16,53 @@ import java.util.NoSuchElementException;
 public class ProductController {
     @Autowired
     private ProductServiceImpl productService;
+    @Autowired
+    private ProductMapper productMapper;
 
     @PostMapping
-    public ResponseEntity<SuccessMessageDTO<Product>> createProduct(@RequestBody Product product){
-        Product createdProduct = productService.save(product);
+    public ResponseEntity<SimpleMessageDTO> createProduct(@Valid @RequestBody ProductDTO productDTO){
+        productService.save(
+                productMapper.productDtoToProduct(productDTO)
+        );
+
         return new ResponseEntity<>(
-                new SuccessMessageDTO<>("Produto criado com sucesso!", createdProduct),
+                new SimpleMessageDTO("Produto criado com sucesso!"),
                 HttpStatus.CREATED
         );
     };
 
     @GetMapping
-    public ResponseEntity<ProductListDTO> getAllProducts(){
-        Iterable<Product> productLists = productService.findAll();
+    public ResponseEntity<Iterable<ProductDTO>> getAllProducts(){
+        var productLists = productMapper.productListToProductDtoList(
+                productService.findAll()
+        );
+
         return new ResponseEntity<>(
-                new ProductListDTO(productLists),
+                productLists,
                 HttpStatus.OK
         );
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id){
-        var product = productService.findById(id);
-        if (product.isEmpty()){
-            throw new NoSuchElementException("Esse produto não existe.");
-        }
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id){
+        var product = productMapper.productToProductDto(
+                productService.findById(id).orElseThrow(()-> new NoSuchElementException("Esse produto não existe."))
+        );
 
         return new ResponseEntity<>(
-                product.get(),
+                product,
                 HttpStatus.OK
         );
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<SuccessMessageDTO<Product>> updateProduct(@RequestBody Product product, @PathVariable Long id){
-        Product updatedProduct = productService.update(product, id);
+    public ResponseEntity<SimpleMessageDTO> updateProduct(@Valid @RequestBody ProductDTO productDTO, @PathVariable Long id){
+        productService.update(
+                productMapper.productDtoToProduct(productDTO),
+                id
+        );
         return new ResponseEntity<>(
-                new SuccessMessageDTO<>("Produto atualizado com sucesso!", updatedProduct),
+                new SimpleMessageDTO("Produto atualizado com sucesso!"),
                 HttpStatus.OK
         );
     }
