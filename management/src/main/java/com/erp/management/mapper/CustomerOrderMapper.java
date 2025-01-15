@@ -12,18 +12,11 @@ import org.mapstruct.factory.Mappers;
 public interface CustomerOrderMapper {
     CustomerOrderMapper INSTANCE = Mappers.getMapper(CustomerOrderMapper.class);
 
-    @Mapping(source = "customer.name", target = "customer.customerName")
     CustomerOrder customerOrderDtoToCustomerOrder(CustomerOrderDTO customerOrderDTO);
 
-    @Mapping(source = "customer.customerName ", target = "customer.name")
     CustomerOrderDTO customerOrderToCustomerOrderDto(CustomerOrder customerOrder);
 
-    @Mapping(source = "customer.name", target = "customer.customerName")
     Iterable<CustomerOrder> customerOrderDtoListToCustomerOrderList(Iterable<CustomerOrderDTO> customerOrderDTOList);
 
-    @Mapping(source = "customer.customerName ", target = "customer.name")
     Iterable<CustomerOrderDTO> customerOrderListToCustomerOrderDtoList(Iterable<CustomerOrder> customerOrderList);
-
-
-
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -57,6 +58,7 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
         CustomerOrder createdCustomerOrder = CustomerOrder.builder()
                 .customer(customerOrder.getCustomer())
                 .total(customerOrder.getTotal())
+                .orderDate(new Date())
                 .build();
 
         customerOrderRepository.save(createdCustomerOrder);

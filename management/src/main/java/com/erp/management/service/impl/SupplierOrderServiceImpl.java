@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -57,6 +58,7 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
         SupplierOrder createdSupplierOrder = SupplierOrder.builder()
                 .supplier(supplierOrder.getSupplier())
                 .total(supplierOrder.getTotal())
+                .orderDate(new Date())
                 .build();
 
         supplierOrderRepository.save(createdSupplierOrder);

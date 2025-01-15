@@ -1,8 +1,12 @@
 package com.erp.management.DTOs;
 
+import jakarta.validation.constraints.NotNull;
+
 public record OrderProductDTO(
+        @NotNull
         ProductToOrderDTO product,
-        Integer quantity,
-        Double totalCost
+
+        @NotNull
+        Integer quantity
 ){
 }
