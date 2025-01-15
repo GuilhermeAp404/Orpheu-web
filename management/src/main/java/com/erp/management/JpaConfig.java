@@ -35,7 +35,7 @@ public class JpaConfig {
         factory.setDataSource(dataSource);
 
         Properties jpaProperties = new Properties();
-        jpaProperties.setProperty("hibernate.hbm2ddl.auto", "validate");
+        jpaProperties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
         factory.setJpaProperties(jpaProperties);
 
         return factory;

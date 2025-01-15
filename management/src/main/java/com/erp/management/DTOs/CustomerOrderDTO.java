@@ -1,8 +1,10 @@
 package com.erp.management.DTOs;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 
 public record CustomerOrderDTO(
         Long id,
@@ -12,7 +14,7 @@ public record CustomerOrderDTO(
         @NotNull(message = "O total do pedido precisa ser enviado")
         Double total,
 
-        @NotEmpty(message = "É necessario ter pelo menos um produto para criar um pedido")
-        Iterable<OrderProductDTO> customerOrderProducts
+        @NotEmpty(message = "A lista de produtos não pode estar vázia")
+        List<OrderProductDTO> customerOrderProducts
 ) {
 }

@@ -1,7 +1,9 @@
 package com.erp.management.domain.model;
 
+import com.erp.management.domain.model.base.Order;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 import java.util.List;
@@ -13,34 +15,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class CustomerOrder {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+@SuperBuilder
+public class CustomerOrder extends Order {
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @Column(name = "customer_order_date")
-    private Date customerOrderDate = new Date();
-
-    @Column(name = "total", nullable = false)
-    private Double total;
-
     @OneToMany(mappedBy = "customerOrder", fetch = FetchType.LAZY ,cascade = CascadeType.PERSIST)
     private List<CustomerOrderProduct> customerOrderProducts;
-
-    public CustomerOrder(Customer customer, Double total) {
-        this.customer = customer;
-        this.total = total;
-    }
-
-    public CustomerOrder(Long id, Customer customer, Date customerOrderDate, Double total) {
-        this.id = id;
-        this.customer = customer;
-        this.customerOrderDate = customerOrderDate;
-        this.total = total;
-    }
 }

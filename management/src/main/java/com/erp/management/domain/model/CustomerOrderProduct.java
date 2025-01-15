@@ -1,8 +1,10 @@
 package com.erp.management.domain.model;
 
+import com.erp.management.domain.model.base.OrderProduct;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "customer_order_products")
@@ -10,37 +12,10 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class CustomerOrderProduct {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+@SuperBuilder
+public class CustomerOrderProduct extends OrderProduct {
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "customer_order")
     private CustomerOrder customerOrder;
-
-    @ManyToOne
-    private Product product;
-
-    @Column(name = "quantity", nullable = false)
-    private Integer quantity;
-
-    @Column(name = "total_cost", nullable = false)
-    private Double totalCost;
-
-    public CustomerOrderProduct(CustomerOrder customerOrder, Product product, Integer quantity) {
-        this.customerOrder = customerOrder;
-        this.product = product;
-        this.quantity = quantity;
-        this.totalCost = quantity * product.getSellingPrice();
-    }
-
-    public CustomerOrderProduct(Long id, CustomerOrder customerOrder, Product product, Integer quantity) {
-        this.id = id;
-        this.customerOrder = customerOrder;
-        this.product = product;
-        this.quantity = quantity;
-        this.totalCost = quantity * product.getSellingPrice();
-    }
 }
