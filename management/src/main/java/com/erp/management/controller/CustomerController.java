@@ -17,11 +17,13 @@ import java.util.NoSuchElementException;
 public class CustomerController {
     @Autowired
     private CustomerServiceImpl customerService;
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @PostMapping
     public ResponseEntity<SimpleMessageDTO> createCustomer(@Valid @RequestBody CustomerDTO customerDTO){
         customerService.save(
-                CustomerMapper.INSTANCE.customerDtoToCustomer(customerDTO)
+                customerMapper.customerDtoToCustomer(customerDTO)
         );
 
         return new ResponseEntity<>(
@@ -32,7 +34,7 @@ public class CustomerController {
 
     @GetMapping
     public ResponseEntity<Iterable<CustomerDTO>> getAllCustomers(){
-        var customersList = CustomerMapper.INSTANCE.customerListTocustomerDtoList(
+        var customersList = customerMapper.customerListTocustomerDtoList(
                 customerService.findAll()
         );
 
@@ -44,7 +46,7 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id){
-        var customer = CustomerMapper.INSTANCE.customerToCustomerDto(
+        var customer = customerMapper.customerToCustomerDto(
                 customerService.findById(id)
                         .orElseThrow(() -> new NoSuchElementException("Esse cliente não existe"))
         );
@@ -58,7 +60,7 @@ public class CustomerController {
     @PutMapping("/{id}")
     public ResponseEntity<SimpleMessageDTO> updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerDTO customerDTO){
         customerService.update(
-                CustomerMapper.INSTANCE.customerDtoToCustomer(customerDTO),
+                customerMapper.customerDtoToCustomer(customerDTO),
                 id
         );
 

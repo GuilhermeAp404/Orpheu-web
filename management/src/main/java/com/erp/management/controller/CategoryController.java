@@ -17,11 +17,13 @@ import java.util.NoSuchElementException;
 public class CategoryController {
     @Autowired
     private CategoryServiceImpl categoryService;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @PostMapping
     public ResponseEntity<SimpleMessageDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
         categoryService.save(
-                CategoryMapper.INSTANCE.categoryDtoToCategory(categoryDTO)
+                categoryMapper.categoryDtoToCategory(categoryDTO)
         );
 
         return new ResponseEntity<>(
@@ -32,7 +34,7 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<Iterable<CategoryDTO>> getAllCategories(){
-        var categoryList = CategoryMapper.INSTANCE.categoryListToCategoryDtoList(
+        var categoryList = categoryMapper.categoryListToCategoryDtoList(
                 categoryService.findAll()
         );
 
@@ -44,7 +46,7 @@ public class CategoryController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id){
-        var category = CategoryMapper.INSTANCE.categoryToCategoryDto(
+        var category = categoryMapper.categoryToCategoryDto(
                 categoryService.findById(id)
                         .orElseThrow(()->new NoSuchElementException("Essa categoria não existe"))
         );
@@ -58,7 +60,7 @@ public class CategoryController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<SimpleMessageDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long id){
         categoryService.update(
-                CategoryMapper.INSTANCE.categoryDtoToCategory(categoryDTO),
+                categoryMapper.categoryDtoToCategory(categoryDTO),
                 id
         );
 

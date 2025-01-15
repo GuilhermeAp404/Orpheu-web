@@ -17,11 +17,13 @@ import java.util.NoSuchElementException;
 public class CustomerOrderController {
     @Autowired
     private CustomerOrderServiceImpl customerOrderService;
+    @Autowired
+    private CustomerOrderMapper customerOrderMapper;
 
     @PostMapping
     public ResponseEntity<SimpleMessageDTO> createCustomerOrder(@Valid @RequestBody CustomerOrderDTO customerOrderDTO){
         customerOrderService.save(
-                CustomerOrderMapper.INSTANCE.customerOrderDtoToCustomerOrder(customerOrderDTO)
+                customerOrderMapper.customerOrderDtoToCustomerOrder(customerOrderDTO)
         );
 
         return new ResponseEntity<>(
@@ -31,7 +33,7 @@ public class CustomerOrderController {
 
     @GetMapping
     public ResponseEntity<Iterable<CustomerOrderDTO>> getAllCustomerOrders(){
-        var customerOrdersList = CustomerOrderMapper.INSTANCE.customerOrderListToCustomerOrderDtoList(
+        var customerOrdersList = customerOrderMapper.customerOrderListToCustomerOrderDtoList(
                 customerOrderService.findAll()
         );
 
@@ -43,7 +45,7 @@ public class CustomerOrderController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CustomerOrderDTO> getCustomerOrderById(@PathVariable Long id){
-        var customerOrder = CustomerOrderMapper.INSTANCE.customerOrderToCustomerOrderDto(
+        var customerOrder = customerOrderMapper.customerOrderToCustomerOrderDto(
                 customerOrderService.findById(id)
                         .orElseThrow(()-> new NoSuchElementException("Pedido de fornecedor não foi encontrado!"))
         );
@@ -57,7 +59,7 @@ public class CustomerOrderController {
     @PutMapping("/{id}")
     public ResponseEntity<SimpleMessageDTO> updateCustomerOrder(@PathVariable Long id, @Valid @RequestBody CustomerOrderDTO customerOrderDTO){
         customerOrderService.update(
-                CustomerOrderMapper.INSTANCE.customerOrderDtoToCustomerOrder(customerOrderDTO),
+                customerOrderMapper.customerOrderDtoToCustomerOrder(customerOrderDTO),
                 id
         );
 

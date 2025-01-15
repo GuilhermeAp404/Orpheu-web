@@ -17,11 +17,13 @@ import java.util.NoSuchElementException;
 public class SupplierController {
     @Autowired
     private SupplierServiceImpl supplierService;
+    @Autowired
+    private SupplierMapper supplierMapper;
 
     @PostMapping
     public ResponseEntity<SimpleMessageDTO> createSupplier(@Valid @RequestBody SupplierDTO supplierDTO){
         supplierService.save(
-                SupplierMapper.INSTANCE.supplierDtoToSupplier(supplierDTO)
+                supplierMapper.supplierDtoToSupplier(supplierDTO)
         );
 
         return new ResponseEntity<>(
@@ -31,7 +33,7 @@ public class SupplierController {
     }
     @GetMapping
     public ResponseEntity<Iterable<SupplierDTO>> getAllSuppliers(){
-        var suppliersList = SupplierMapper.INSTANCE.supplierListToSupplierDtoList(
+        var suppliersList = supplierMapper.supplierListToSupplierDtoList(
                 supplierService.findAll()
         );
 
@@ -43,7 +45,7 @@ public class SupplierController {
 
     @GetMapping("/{id}")
     public ResponseEntity<SupplierDTO> getSupplierById(@PathVariable Long id){
-        var supplier = SupplierMapper.INSTANCE.supplierToSupplierDto(
+        var supplier = supplierMapper.supplierToSupplierDto(
                 supplierService.findById(id)
                         .orElseThrow(()->new NoSuchElementException("Esse fornecedor não existe."))
         );
@@ -57,7 +59,7 @@ public class SupplierController {
     @PutMapping("/{id}")
     public ResponseEntity<SimpleMessageDTO> updateSupplier(@PathVariable Long id, @Valid @RequestBody SupplierDTO supplierDTO){
         var updatedSupplier = supplierService.update(
-                SupplierMapper.INSTANCE.supplierDtoToSupplier(supplierDTO),
+                supplierMapper.supplierDtoToSupplier(supplierDTO),
                 id
         );
 

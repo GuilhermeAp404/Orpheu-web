@@ -16,11 +16,13 @@ import java.util.NoSuchElementException;
 public class ProductController {
     @Autowired
     private ProductServiceImpl productService;
+    @Autowired
+    private ProductMapper productMapper;
 
     @PostMapping
     public ResponseEntity<SimpleMessageDTO> createProduct(@Valid @RequestBody ProductDTO productDTO){
         productService.save(
-                ProductMapper.INSTANCE.productDtoToProduct(productDTO)
+                productMapper.productDtoToProduct(productDTO)
         );
 
         return new ResponseEntity<>(
@@ -31,7 +33,7 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<Iterable<ProductDTO>> getAllProducts(){
-        var productLists = ProductMapper.INSTANCE.productListToProductDtoList(
+        var productLists = productMapper.productListToProductDtoList(
                 productService.findAll()
         );
 
@@ -43,7 +45,7 @@ public class ProductController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id){
-        var product = ProductMapper.INSTANCE.productToProductDto(
+        var product = productMapper.productToProductDto(
                 productService.findById(id).orElseThrow(()-> new NoSuchElementException("Esse produto não existe."))
         );
 
@@ -56,7 +58,7 @@ public class ProductController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<SimpleMessageDTO> updateProduct(@Valid @RequestBody ProductDTO productDTO, @PathVariable Long id){
         productService.update(
-                ProductMapper.INSTANCE.productDtoToProduct(productDTO),
+                productMapper.productDtoToProduct(productDTO),
                 id
         );
         return new ResponseEntity<>(

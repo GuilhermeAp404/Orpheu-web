@@ -2,6 +2,7 @@ package com.erp.management.controller;
 
 import com.erp.management.DTOs.SupplierOrderDTO;
 import com.erp.management.DTOs.SimpleMessageDTO;
+import com.erp.management.mapper.SupplierMapper;
 import com.erp.management.mapper.SupplierOrderMapper;
 import com.erp.management.service.impl.SupplierOrderServiceImpl;
 import jakarta.validation.Valid;
@@ -17,11 +18,13 @@ import java.util.NoSuchElementException;
 public class SupplierOrderController {
     @Autowired
     private SupplierOrderServiceImpl supplierOrderService;
+    @Autowired
+    private SupplierOrderMapper supplierOrderMapper;
 
     @PostMapping
     public ResponseEntity<SimpleMessageDTO> createSupplierOrder(@Valid @RequestBody SupplierOrderDTO supplierOrderDTO){
         supplierOrderService.save(
-                SupplierOrderMapper.INSTANCE.supplierOrderDtoToSupplierOrder(supplierOrderDTO)
+                supplierOrderMapper.supplierOrderDtoToSupplierOrder(supplierOrderDTO)
         );
 
         return new ResponseEntity<>(
@@ -32,7 +35,7 @@ public class SupplierOrderController {
 
     @GetMapping
     public ResponseEntity<Iterable<SupplierOrderDTO>> getAllSupplierOrders(){
-        var supplierOrdersList = SupplierOrderMapper.INSTANCE.supplierOrderListToSupplierOrderDtoList(
+        var supplierOrdersList = supplierOrderMapper.supplierOrderListToSupplierOrderDtoList(
                 supplierOrderService.findAll()
         );
 
@@ -44,7 +47,7 @@ public class SupplierOrderController {
 
     @GetMapping("/{id}")
     public ResponseEntity<SupplierOrderDTO> getSupplierOrderById(@PathVariable Long id){
-        var supplierOrder = SupplierOrderMapper.INSTANCE.supplierOrderToSupplierOrderDto(
+        var supplierOrder = supplierOrderMapper.supplierOrderToSupplierOrderDto(
                 supplierOrderService.findById(id)
                         .orElseThrow(()->new NoSuchElementException("Pedido do fornecedor não foi encontrado!"))
         );
@@ -58,7 +61,7 @@ public class SupplierOrderController {
     @PutMapping("/{id}")
     public ResponseEntity<SimpleMessageDTO> updateSupplierOrder(@PathVariable Long id, @Valid @RequestBody SupplierOrderDTO supplierOrderDTO){
         supplierOrderService.update(
-                SupplierOrderMapper.INSTANCE.supplierOrderDtoToSupplierOrder(supplierOrderDTO),
+                supplierOrderMapper.supplierOrderDtoToSupplierOrder(supplierOrderDTO),
                 id
         );
 
