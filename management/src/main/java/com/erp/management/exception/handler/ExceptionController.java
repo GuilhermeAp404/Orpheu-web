@@ -3,6 +3,7 @@ package com.erp.management.exception.handler;
 import com.erp.management.DTOs.SimpleMessageDTO;
 import com.erp.management.exception.InvalidSupplierRegister;
 import com.erp.management.exception.UnavaliableAmount;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +25,15 @@ public class ExceptionController {
         return new ResponseEntity<>(new SimpleMessageDTO(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
-
-
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<SimpleMessageDTO> dataIntegrityViolationHandler(DataIntegrityViolationException ex){
         var message = new SimpleMessageDTO("Um erro ocorreu ao acessar a base de dados. Por favor, tente novamente.");
 
-        if(ex.getMessage().contains("duplicate")){
+        if(ex.getMessage().contains("Duplicate")){
             message = new SimpleMessageDTO("Os dados inseridos já existem em nosso sistema. Por favor, verifique e tente novamente.");
-        };
+        }
 
-        if(ex.getMessage().contains("delete")){
+        if(ex.getMessage().contains("Cannot delete or update")){
             message = new SimpleMessageDTO("Para garantir que seus dados permaneçam seguros, não podemos excluir este item no momento.");
         }
 
@@ -46,7 +45,7 @@ public class ExceptionController {
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map((error)-> error.getDefaultMessage())
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
