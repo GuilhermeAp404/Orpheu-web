@@ -19,14 +19,15 @@ public class CreateInitialUser implements CommandLineRunner {
 
 		@Override
 		public void run(String... args) throws Exception {
+
 			User user = User.builder()
-					.username("Seu_nome")
-					.email("seu_email@email.com")
-					.password(encoder.encode("crie_uma_senha_forte"))
+					.username("herbhut")
+					.email("herbhutheadshop@gmail.com")
+					.password(encoder.encode("8778s5y144"))
 					.role(UserRole.valueOf("ADMIN"))
 					.build();
 
-			Optional<User> userDb = userRespository.findByEmail(user.getEmail());
+			Optional<User> userDb = userRespository.findByEmail("herbhutheadshop@gmail.com");
 
 			if (userDb.isEmpty()){
 				userRespository.save(user);
