@@ -7,6 +7,7 @@
     <img src="https://skillicons.dev/icons?i=java,hibernate,spring&theme=dark" />
   </a>
 </p>
+
 ## Diagrama de classes e relacionamentos
 
 ```mermaid
