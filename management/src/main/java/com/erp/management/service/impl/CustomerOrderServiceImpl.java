@@ -89,7 +89,7 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public CustomerOrder update(CustomerOrder customerOrder, Long id) {
         CustomerOrder customerOrderDb= customerOrderRepository.findById(id)
-                .orElseThrow(()-> new NoSuchElementException("Esse pedido de fornecedor não existe!"));
+                .orElseThrow(()-> new NoSuchElementException("Esse pedido de cliente não existe!"));
 
         adjustStockToDelete(customerOrderDb.getCustomerOrderProducts());
         customerOrderProductRepository.deleteAllByCustomerOrder(id);
@@ -127,11 +127,15 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void delete(Long id) {
         CustomerOrder customerOrderDb= customerOrderRepository.findById(id)
-                .orElseThrow(()-> new NoSuchElementException("Esse pedido de fornecedor não existe!"));
+                .orElseThrow(()-> new NoSuchElementException("Esse pedido de cliente não existe!"));
 
         adjustStockToDelete(customerOrderDb.getCustomerOrderProducts());
         customerOrderProductRepository.deleteAllByCustomerOrder(id);
 
         customerOrderRepository.deleteById(id);
+    }
+
+    public Double getTotal(){
+        return customerOrderRepository.sumTotal();
     }
 }

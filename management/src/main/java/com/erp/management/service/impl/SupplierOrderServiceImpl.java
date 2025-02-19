@@ -134,4 +134,8 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
 
         supplierOrderRepository.deleteById(id);
     }
+
+    public Double getTotal(){
+        return supplierOrderRepository.sumTotal();
+    }
 }

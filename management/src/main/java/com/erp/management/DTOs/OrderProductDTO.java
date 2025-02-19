@@ -7,6 +7,8 @@ public record OrderProductDTO(
         ProductToOrderDTO product,
 
         @NotNull
-        Integer quantity
+        Integer quantity,
+
+        Double totalCost
 ){
 }

@@ -2,6 +2,7 @@ package com.erp.management.controller;
 
 import com.erp.management.DTOs.auth.AuthDTO;
 import com.erp.management.DTOs.auth.LoginDTO;
+import com.erp.management.exception.InvalidPassword;
 import com.erp.management.security.TokenService;
 import com.erp.management.security.UserDetailsImpl;
 import com.erp.management.security.UserDetailsServiceImpl;
@@ -28,15 +29,16 @@ public class AuthController {
     public ResponseEntity<AuthDTO> loginUser(@RequestBody LoginDTO login){
         UserDetailsImpl user = userDetailsService.loadUserByUsername(login.email());
 
-        if(passwordEncoder.matches(login.password(), user.getPassword())){
+        if(passwordEncoder.matches(login.password(), user.getPassword())) {
             String token = tokenService.createToken(user);
             return new ResponseEntity<>(
                     new AuthDTO(
                             user.getUser().getId(), user.getUser().getUsername(), user.getUser().getEmail(),
                             token
                     ), HttpStatus.OK);
+        }else{
+            throw new InvalidPassword();
         }
-        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/check")

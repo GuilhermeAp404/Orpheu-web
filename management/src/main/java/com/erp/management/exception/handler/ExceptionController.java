@@ -1,12 +1,14 @@
 package com.erp.management.exception.handler;
 
 import com.erp.management.DTOs.SimpleMessageDTO;
+import com.erp.management.exception.InvalidPassword;
 import com.erp.management.exception.InvalidSupplierRegister;
 import com.erp.management.exception.UnavaliableAmount;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -51,5 +53,15 @@ public class ExceptionController {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(InvalidPassword.class)
+    public ResponseEntity<SimpleMessageDTO> invalidPasswordExceptionHandler(InvalidPassword ex){
+        var message = new SimpleMessageDTO(ex.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
+    }
 
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<SimpleMessageDTO> usernameNotFoundExceptionHandler(UsernameNotFoundException ex){
+        var message = new SimpleMessageDTO(ex.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
+    }
 }

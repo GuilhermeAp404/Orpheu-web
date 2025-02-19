@@ -46,7 +46,8 @@ public class SecurityConfiguration {
             "/supplier/order",
             "/supplier/order/**",
             "/customer/order",
-            "/customer/order/**"
+            "/customer/order/**",
+            "/profit"
 
     };
 
