@@ -100,6 +100,10 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
 
             Double totalCost = productDb.getSellingPrice() * customerOrderProduct.getQuantity();
 
+            if(customerOrderProduct.getTotalCost() != null){
+                totalCost = customerOrderProduct.getTotalCost();
+            }
+
             CustomerOrderProduct orderProduct = CustomerOrderProduct.builder()
                     .product(productDb)
                     .customerOrder(customerOrderDb)

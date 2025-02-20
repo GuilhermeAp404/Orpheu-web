@@ -100,6 +100,10 @@ public class SupplierOrderServiceImpl implements SupplierOrderService {
 
             Double totalCost = productDb.getCostPrice() * supplierOrderProduct.getQuantity();
 
+            if(supplierOrderProduct.getTotalCost() != null){
+                totalCost = supplierOrderProduct.getTotalCost();
+            }
+
             SupplierOrderProduct orderProduct = SupplierOrderProduct.builder()
                     .supplierOrder(supplierOrderDb)
                     .product(productDb)
